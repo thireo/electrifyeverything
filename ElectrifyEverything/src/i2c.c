@@ -15,8 +15,10 @@ void configure_i2c_master(void)
 	/* Change buffer timeout to something longer. */
 	config_i2c_master.buffer_timeout = 10000;
 	config_i2c_master.baud_rate = I2C_MASTER_BAUD_RATE_100KHZ;
+	config_i2c_master.pinmux_pad0 = PINMUX_PA22C_SERCOM3_PAD0;
+	config_i2c_master.pinmux_pad1 = PINMUX_PA23C_SERCOM3_PAD1;
 	/* Initialize and enable device with config. */
-	i2c_master_init(&i2c_master_instance, SERCOM5, &config_i2c_master);
+	i2c_master_init(&i2c_master_instance, SERCOM3, &config_i2c_master);
 	i2c_master_enable(&i2c_master_instance);
 }
 
@@ -66,7 +68,7 @@ int * i2c_addr_scan(void)
 	return found_array;
 }
 
-void i2c_read(uint8_t addr,uint8_t reg, uint8_t data_length,uint8_t* data_ptr)
+uint8_t i2c_read(uint8_t addr,uint8_t reg, uint8_t data_length,uint8_t* data_ptr)
 {
 	//uint8_t read_datab[data_length];
 	uint8_t state = 0;
@@ -86,13 +88,15 @@ void i2c_read(uint8_t addr,uint8_t reg, uint8_t data_length,uint8_t* data_ptr)
 	};
 	uint16_t timeout = 0;
 
-	while (i2c_master_write_packet_wait(&i2c_master_instance,&packet) != STATUS_OK)
+	do
 	{
+		state = i2c_master_write_packet_wait(&i2c_master_instance,&packet);
 		if (timeout++ == I2C_TIMEOUT) {
-			return;
+			return state;
 			break;
 		}
 	}
+	while (state != STATUS_OK);
 	
 	struct i2c_master_packet read_packet = {
 		.address     = addr,// | (1 << 8),
@@ -103,7 +107,7 @@ void i2c_read(uint8_t addr,uint8_t reg, uint8_t data_length,uint8_t* data_ptr)
 		.hs_master_code  = 0x0,
 	};
 	state = i2c_master_read_packet_wait(&i2c_master_instance,&read_packet);
-	//return read_data;
+	return state;
 }
 
 /* INSERT IN MAIN TO RECEIVE ARRAY OF ATTACHED I2C DEVICES

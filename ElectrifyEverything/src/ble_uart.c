@@ -40,7 +40,6 @@ void uart_clk_init(void)
 	GCLK_CLKCTRL_CLKEN;			// and enable it
 
 	while ( GCLK->STATUS.reg & GCLK_STATUS_SYNCBUSY ); // Wait for synchronization
-	
 }
 
 void uart_pin_init(void)

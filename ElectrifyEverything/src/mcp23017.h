@@ -52,7 +52,7 @@
 
 #define MCP23017_INT_ERR 255
 
-
+#define MCP23017_PWR_PIN PIN_PA07
 
 void test_addr(void);
 void set_to_output(void);
@@ -60,9 +60,10 @@ uint8_t init_all_ports(void);
 void toggle_all_pins(void);
 void set_all_pins_to(bool val);
 
-void mcp23017_set_pins(uint8_t addr, uint8_t porta, uint8_t portb);
-void mcp23017_read_all_ports(uint8_t read_data_ptr[2][8]);
+uint8_t mcp23017_set_pins(uint8_t addr, uint8_t porta, uint8_t portb);
+void mcp23017_read_all_ports(uint8_t read_data_ptr[2][8], uint8_t states[8]);
+void mcp23017_reset(void);
 
-
+void mcp23017_pin_init(void);
 
 #endif /* MCP23017_H_ */

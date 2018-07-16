@@ -10,7 +10,7 @@
 #define MAIN_H_
 
 
-
+#define SOFTWARE_VERSION 42
 
 
 #endif /* MAIN_H_ */

@@ -9,10 +9,11 @@
 #ifndef SOUNDS_H_
 #define SOUNDS_H_
 #include "mcp23017.h"
+#include "asf.h"
 
 #define SOUNDS_PIN_SS PIN_PA05 //Low is Sample, high is Speak
-#define SOUNDS_PIN_SPDT_SEL1 PIN_PA06	//Low is SB_out, high is MTH_out
-#define SOUNDS_PIN_SPDT_SEL2 PIN_PA07	//Low is SPDT_out1, high is Speak.
+//#define SOUNDS_PIN_SPDT_SEL1 PIN_PA06	//Low is SB_out, high is MTH_out
+//#define SOUNDS_PIN_SPDT_SEL2 PIN_PA07	//Low is SPDT_out1, high is Speak.
 
 #define SB_PIN_BTN00 PIN_PA11
 #define SB_PIN_BTN01 PIN_PA12
@@ -36,7 +37,20 @@
 #define MTH_BTN7 6
 #define MTH_EN 7
 
+#define SB_PIN_UG PIN_PA27
+#define SB_PIN_RESET PIN_PA28
 
+
+#define SAMPLE_RATE_x16 0
+
+#define SOUNDS_BAUDRATE 9600
+#define SYSTEM_CLK 8000000
+#define SOUNDS_RX_PIN 3
+#define SOUNDS_TX_PIN 2
+#define SOUNDS_SERCOM SERCOM5
+
+volatile char sounds_rx_buffer_array[128];
+volatile static int sounds_buff_count;
 
 void sounds_init_pins(void);
 
@@ -47,15 +61,20 @@ void select_mth(void);
 void select_soundboard(void);
 void select_audio_in(void);
 
+void press_sb_btn_once(uint8_t btn);
 void press_sb_btn(uint8_t btn);
 void release_sb_btn(uint8_t btn);
 
 void press_mth_btn(uint8_t btn);
 void release_mth_btn(uint8_t btn);
 
+void sounds_reset(void);
 
 
-
-
+void sounds_uart_clk_init(void);
+void sounds_uart_pin_init(void);
+void sounds_uart_init(void);
+void sounds_uart_write(char buffer[]);
+void sounds_reset_buffers();
 
 #endif /* SOUNDS_H_ */

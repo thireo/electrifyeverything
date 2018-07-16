@@ -38,3 +38,6 @@ volatile bool master_test;
 volatile bool flashy1;
 volatile bool flashy2;
 volatile bool flashyfade;
+
+volatile bool valve_open;
+volatile bool valve_close;

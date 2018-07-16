@@ -141,7 +141,7 @@ src/pwm.d src/pwm.o: ../src/pwm.c ../src/pwm.h ../src/asf.h \
  ../src/ASF/sam0/drivers/wdt/wdt.h \
  ../src/ASF/sam0/drivers/wdt/wdt_callback.h ../src/mcp23017.h \
  ../src/cmd.h ../src/audia6.h ../src/msgeq7.h ../src/ble_uart.h \
- ../src/i2c.h
+ ../src/i2c.h ../src/uart.h
 
 ../src/pwm.h:
 
@@ -450,3 +450,5 @@ a:\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\alloca.h:
 ../src/ble_uart.h:
 
 ../src/i2c.h:
+
+../src/uart.h:

@@ -143,7 +143,7 @@ src/cmd.d src/cmd.o: ../src/cmd.c ../src/cmd.h ../src/asf.h \
  ../src/mcp23017.h \
  a:\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\string.h \
  a:\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\string.h \
- ../src/ble_uart.h ../src/pwm.h ../src/sounds.h
+ ../src/ble_uart.h ../src/pwm.h ../src/sounds.h ../src/uart.h
 
 ../src/cmd.h:
 
@@ -454,3 +454,5 @@ a:\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\string.h:
 ../src/pwm.h:
 
 ../src/sounds.h:
+
+../src/uart.h:

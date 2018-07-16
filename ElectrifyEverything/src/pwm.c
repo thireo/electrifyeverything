@@ -11,6 +11,7 @@
 #include "msgeq7.h"
 #include "ble_uart.h"
 #include "i2c.h"
+#include "uart.h"
 
 void pwm_port()
 {
@@ -40,9 +41,9 @@ void init_TC3()
 	TC3->COUNT16.INTENSET.reg = TC_INTENSET_MC0;
 	NVIC_EnableIRQ(TC3_IRQn);
 	NVIC_SetPriority(TC3_IRQn,2);
-	PORT->Group[0].DIRSET.reg=18;
+	/*PORT->Group[0].DIRSET.reg=18;
 	PORT->Group[0].PINCFG[18].bit.PMUXEN=1;
-	PORT->Group[0].PMUX[9].bit.PMUXE = 4;
+	PORT->Group[0].PMUX[9].bit.PMUXE = 4;*/
 }
 int count = 0;
 
@@ -50,51 +51,71 @@ bool pin_state = false;
 uint16_t values_bands[6];
 
 bool a_okayish = true;
+char buffer[64];
 void TC3_Handler()
 {
 	static bool blink_state = false;
 	// Overflow interrupt triggered
 	if ( TC3->COUNT16.INTFLAG.bit.OVF == 1 )
 	{
-		if (party)
-		{
-			msgeq7_all_bands(values_bands);
-			party_lights(values_bands);
-		}
-		if ((pwm_count % 25) == 0)
-		{
-			if (flashy2)
-			{
-				flashy_flash1();
-			}
-			else if (flashy1)
-			{
-				flashy_flash2();
-			}
-		}
-		if (flashyfade)
-		{
-			flashy_fades();
-		}
-
-		
-		update_all_ports();
-		
+		should_update = true;	
 		pwm_count++;
+		
+		
+
 		if (pwm_count > PWM_FREQ)
 		{
+			/*if ((seconds % 300) == 0)
+			{
+				execute_order_66 = true;
+			}*/
+			seconds++;
 			//uint8_t *ptr = &read_data[0][0];
-			a_okayish = a_okay(read_data);
+			//a_okayish = a_okay(read_data);
 			/*set_blinker(blink_state, blink_left,blink_right);
 			blink_state = !blink_state;*/
-			char buffer[64];
+			/*char buffer[64];
 			if (party)
 			{
 				sprintf(buffer,"%d %d %d %d %d %d",values_bands[0],values_bands[1],values_bands[2],values_bands[3],values_bands[4],values_bands[5]);
 				ble_uart_write(buffer);
-			}
+			}*/
 			pwm_count = 0;
 		}
 		TC3->COUNT16.INTFLAG.reg = TC_INTFLAG_MC0;
 	}
+}
+
+void things_to_do(void)
+{
+	if (party)
+	{
+		msgeq7_all_bands(values_bands);
+		party_lights(values_bands);
+		sprintf(buffer,"%04d %04d %04d %04d %04d %04d\r\n",values_bands[0],values_bands[1],values_bands[2],values_bands[3],values_bands[4],values_bands[5]);
+		uart_write(&buffer);
+		
+	}
+	if ((pwm_count % 25) == 0)
+	{
+		if (flashy2)
+		{
+			flashy_flash1();
+		}
+		else if (flashy1)
+		{
+			flashy_flash2();
+		}
+	}
+	if (flashyfade)
+	{
+		flashy_fades();
+	}
+
+	
+	/*if (party)
+	{
+		sprintf(buffer,"%d %d %d %d %d %d\r\n",values_bands[0],values_bands[1],values_bands[2],values_bands[3],values_bands[4],values_bands[5]);
+		ble_uart_write(buffer);
+	}*/
 }

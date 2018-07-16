@@ -139,7 +139,7 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/ASF/sam0/drivers/tc/tc.h ../src/wdt.h ../src/asf.h \
  ../src/ASF/sam0/drivers/wdt/wdt_callback.h \
  ../src/ASF/sam0/drivers/wdt/wdt.h \
- ../src/ASF/sam0/drivers/wdt/wdt_callback.h ../src/main.h \
+ ../src/ASF/sam0/drivers/wdt/wdt_callback.h ../src/main.h ../src/uart.h \
  ../src/ble_uart.h ../src/mcp23017.h ../src/i2c.h ../src/cmd.h \
  ../src/audia6.h ../src/pwm.h ../src/sounds.h ../src/msgeq7.h
 
@@ -440,6 +440,8 @@ a:\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\alloca.h:
 ../src/ASF/sam0/drivers/wdt/wdt_callback.h:
 
 ../src/main.h:
+
+../src/uart.h:
 
 ../src/ble_uart.h:
 

@@ -17,6 +17,8 @@
 uint8_t read_data[2][8];
 uint8_t data_LED[2][8];
 
+bool port_update_ongoing;
+
 void data_handler(char buffer[]);
 void update_all_ports();
 void set_blinker(bool state, bool left, bool right);
@@ -26,6 +28,8 @@ void flashy_flash2();
 void flashy_fades();
 void reset_all_lights();
 bool a_okay();
+void configure_pin(uint8_t port, uint8_t addr, uint8_t pin, bool value);
+void mcp23017_reset_error_codes();
 
 
 
@@ -88,6 +92,7 @@ bool a_okay();
 #define HDL_OFF "HDL 0"
 
 #define MASTER_RESET "MSTRRST 42"
+#define MINOR_RESET "MNRRST 42"
 
 #define MASTER_TEST "MSTRTST 42"
 
@@ -103,7 +108,17 @@ bool a_okay();
 #define FLASHYFADE_ON "FLSHFD 1"
 #define FLASHYFADE_OFF "FLSHFD 0"
 
+#define PARTY_TRESH_0 "PRTTRSH0"
+#define PARTY_TRESH_1 "PRTTRSH1"
+#define PARTY_TRESH_2 "PRTTRSH2"
+#define PARTY_TRESH_3 "PRTTRSH3"
+#define PARTY_TRESH_4 "PRTTRSH4"
+#define PARTY_TRESH_5 "PRTTRSH5"
+#define PARTY_TRESH_6 "PRTTRSH6"
+#define PARTY_TRESH_7 "PRTTRSH7"
 
+#define CUT_OUT_VALVE_ON "COV 1"
+#define CUT_OUT_VALVE_OFF "COV 0"
 
 
 
@@ -200,7 +215,28 @@ bool a_okay();
 #define LED_BAR_ADR 5
 #define LED_BAR_PORT 0	//B*/
 
+#define VALVE_OPEN_PIN 0
+#define VALVE_OPEN_ADR 5
+#define VALVE_OPEN_PORT 0
+
+#define VALVE_CLOSE_PIN 1
+#define VALVE_CLOSE_ADR 5
+#define VALVE_CLOSE_PORT 0
+
+#define CABIN_FRONT_LEFT_PIN 2
+#define CABIN_FRONT_LEFT_ADR 5
+#define CABIN_FRONT_LEFT_PORT 0
+
+#define CABIN_FRONT_RIGHT_PIN 3
+#define CABIN_FRONT_RIGHT_ADR 5
+#define CABIN_FRONT_RIGHT_PORT 0
+
+#define CABIN_BACKSEAT_PIN 4
+#define CABIN_BACKSEAT_ADR 5
+#define CABIN_BACKSEAT_PORT 0
 
 #define party_treshold 2500
+
+uint16_t party_thresholds[7];
 
 #endif /* CMD_H_ */

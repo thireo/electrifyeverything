@@ -29,7 +29,7 @@
  */
 #include <asf.h>
 #include "main.h"
-//#include "uart.h"
+#include "uart.h"
 #include "ble_uart.h"
 //#include "ads1115.h"
 #include "mcp23017.h"
@@ -38,6 +38,7 @@
 #include "pwm.h"
 #include "sounds.h"
 #include "msgeq7.h"
+#include "uart.h"
 
 //#include "ds18b20.h"
 
@@ -55,78 +56,51 @@ int main (void)
 	system_init();
 	delay_init();
 	ble_uart_init();
+	uart_init();
+	sprintf(buffer,"\n<-------------------->\n");
+	ble_uart_write(buffer);
+	uart_write(buffer);
+	delay_ms(2000);
+	sprintf(buffer,"Master Board Started\n");
+	ble_uart_write(buffer);
+	uart_write(buffer);
+	sprintf(buffer,"SOFTWARE_VERSION: %d\r\n", SOFTWARE_VERSION);
+	ble_uart_write(buffer);
+	uart_write(buffer);
+	sprintf(buffer,"<-------------------->\n\n");
+	ble_uart_write(buffer);
+	uart_write(buffer);
+	mcp23017_pin_init();
+	
 	configure_i2c_master();
 	
 	uint8_t states = init_all_ports();
-	sprintf(buffer,"I2C: %d%d%d%d%d%d%d%d",(states >> 7)&0x01,(states >> 6)&0x01,(states >> 5)&0x01,(states >> 4)&0x01,(states >> 3)&0x01,(states >> 2)&0x01,(states >> 1)&0x01,(states >> 0)&0x01);
+	//sprintf(buffer,"I2C: %d%d%d%d%d%d%d%d",(states >> 7)&0x01,(states >> 6)&0x01,(states >> 5)&0x01,(states >> 4)&0x01,(states >> 3)&0x01,(states >> 2)&0x01,(states >> 1)&0x01,(states >> 0)&0x01);
 	
-	ble_uart_write(buffer);
+	//ble_uart_write(buffer);
+	
+
 	
 	sounds_init_pins();
+	
+	//sounds_reset();
 	
 	pwm_port();
 	init_TC3();
 	
-	//select_audio_out();
-	
 	msgeq7_init();
-	select_sample();
+	//select_sample();
 	
+	//party = true;
 	
-	
-	/*select_mth();
-	press_mth_btn(MTH_EN);
-	press_mth_btn(MTH_BTN2);
-	release_mth_btn(MTH_BTN2);
-	select_soundboard();*/
-
-	/*press_sb_btn(SB_PIN_BTN01);
-	release_sb_btn(SB_PIN_BTN01);*/
-	
-	//ble_uart_cb_init();
-	
-	/*
-	ds18b20_port_init();
-	delay_ms(100);
-	port_pin_set_output_level(DS18B20_PIN_1,false);
-	delay_us(250);
-	port_pin_set_output_level(DS18B20_PIN_1,true);
-	delay_us(500);
-	port_pin_set_output_level(DS18B20_PIN_1,true);
-	delay_us(150);
-	port_pin_set_output_level(DS18B20_PIN_1,false);	
-	
-	uint8_t read_bit = ds18b20_reset();
-	read_bit = ds18b20_reset();*/
-	
-	
-	
-	
-	//system_interrupt_enable_global();
-	
-	
-	/*
-	ADS1115_configure_extint_channel();
-	ADS1115_configure_extint_callbacks();
-	delay_ms(1000);
-		
-	system_interrupt_enable_global();
-	config_data_bytes config;
-	config.OS = ADS1115_SS_START;
-	config.MUX = ADS1115_MUX_AIN0_GND;
-	config.PGA = ADS1115_PGA_6_144_V;
-	config.MODE = ADS1115_MODE_SS;
-	config.DR = ADS1115_DR_250_SPS;
-	config.COMP_MODE = ADS1115_COMP_MODE_TRADITIONAL;
-	config.COMP_POL = ADS1115_COMP_POL_LOW;
-	config.COMP_LAT = ADS1115_COMP_LAT_DEF;
-	config.COMP_QUE = ADS1115_COMP_QUE_DISABLE;
-	ADS1115_set_config(config);
-	ADS1115_enable_ready_pin();*/
-	
-
-	//flashyfade = true;
-
+	party_thresholds[0] = 1375;
+	party_thresholds[1] = 1550;
+	party_thresholds[2] = 1400;
+	party_thresholds[3] = 2500;
+	party_thresholds[4] = 3000;
+	party_thresholds[5] = 2000;
+	party_thresholds[6] = 2375;
+	 
 	
 	while (1)
 	{
@@ -143,62 +117,54 @@ int main (void)
 			}
 		}
 		
-
-		
-		/*if (rx_buffer_array[0] != 0)
+		if (should_update)
 		{
-			
-			reset_buffers();
-		}*/
-		
-		
-
-// 		config.MUX = ADS1115_MUX_AIN0_GND;
-// 		ADS1115_set_config(config);
-		
-		//delay_ms(1000);
-		//toggle_all_pins();
-		
-		/*delay_ms(10);
-		config.MUX = ADS1115_MUX_AIN1_GND;
-		ADS1115_set_config(config);
-		delay_ms(10);
-		config.MUX = ADS1115_MUX_AIN2_GND;
-		ADS1115_set_config(config);
-		
-		config.MUX = ADS1115_MUX_AIN3_GND;
-		ADS1115_set_config(config);*/
-		
-		//delay_ms(1);
-		/*set_all_pins_to(true);		
-		delay_ms(10);
-		set_all_pins_to(false);		
-		delay_ms(500);*/
-		//delay_ms(500);
-		//ble_uart_write("bob");
-		//Uart_write('h');
-		//printf("billybob\n");
-		
-		//ble_strcmp();
-		//ble_uart_read();
-		
-		
-		
-
-	}
-
-	/* Insert application code here, after the board has been initialized. */
-}
-/*
-void get_next_channel(void)
-{
-	if (clear_to_proceed)
-	{
-		current_channel++;
-		if (current_channel > ADS1115_MUX_AIN3_GND)
-		{
-			current_channel = ADS1115_MUX_AIN0_GND;
+			should_update = false;
+			things_to_do();
+			update_all_ports();
 		}
-		config.MUX = current_channel;
+		if (execute_order_66)
+		{
+			execute_order_66 = false;
+			a_okay();
+		}
+		
+		if (valve_open)
+		{
+			system_interrupt_disable_global();
+			valve_open = false;
+			configure_pin(VALVE_OPEN_PORT,VALVE_OPEN_ADR,VALVE_OPEN_PIN,true);
+			configure_pin(VALVE_CLOSE_PORT,VALVE_CLOSE_ADR,VALVE_CLOSE_PIN,false);
+			update_all_ports();
+			delay_ms(300);
+			configure_pin(VALVE_OPEN_PORT,VALVE_OPEN_ADR,VALVE_OPEN_PIN,false);
+			update_all_ports();
+			delay_ms(4000);
+			configure_pin(VALVE_OPEN_PORT,VALVE_OPEN_ADR,VALVE_OPEN_PIN,true);
+			update_all_ports();
+			delay_ms(300);
+			configure_pin(VALVE_OPEN_PORT,VALVE_OPEN_ADR,VALVE_OPEN_PIN,false);
+			update_all_ports();
+			system_interrupt_enable_global();
+		}
+		if (valve_close)
+		{
+			system_interrupt_disable_global();
+			valve_close = false;
+			configure_pin(VALVE_OPEN_PORT,VALVE_OPEN_ADR,VALVE_OPEN_PIN,false);
+			configure_pin(VALVE_CLOSE_PORT,VALVE_CLOSE_ADR,VALVE_CLOSE_PIN,true);
+			update_all_ports();
+			delay_ms(300);
+			configure_pin(VALVE_CLOSE_PORT,VALVE_CLOSE_ADR,VALVE_CLOSE_PIN,false);
+			update_all_ports();
+			delay_ms(4000);
+			configure_pin(VALVE_CLOSE_PORT,VALVE_CLOSE_ADR,VALVE_CLOSE_PIN,true);
+			update_all_ports();
+			delay_ms(300);
+			configure_pin(VALVE_CLOSE_PORT,VALVE_CLOSE_ADR,VALVE_CLOSE_PIN,false);
+			update_all_ports();
+			
+			system_interrupt_enable_global();
+		}
 	}
-}*/
+}
