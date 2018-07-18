@@ -150,7 +150,7 @@ void SERCOM2_Handler()
 
 void reset_buffers()
 {
-	for (int k=0;k<sizeof(rx_buffer_array);k++)
+	for (uint8_t k=0;k<sizeof(rx_buffer_array);k++)
 	{
 		rx_buffer_array[k] = 0;
 	}

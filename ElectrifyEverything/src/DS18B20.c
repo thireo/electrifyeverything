@@ -5,7 +5,7 @@
  *  Author: Andreas Thirsbro
  */ 
 #include "ds18b20.h"
-
+/*
 void ds18b20_port_init()
 {
 	struct port_config config_port_pin;
@@ -70,4 +70,4 @@ uint8_t ds18b20_reset(void)
 	system_interrupt_enable_global();
 	delay_us(410);
 	return read_bit;
-}
+}*/

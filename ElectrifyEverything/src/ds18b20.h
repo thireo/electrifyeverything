@@ -21,11 +21,11 @@
 #define DS18B20_READ_PSU			0xB4
 
 
-void ds18b20_port_init();
+/*void ds18b20_port_init();
 void ds18b20_port_output();
 void ds18b20_port_input();
 uint8_t ds18b20_read_bit(void);
 uint8_t ds18b20_reset(void);
-
+*/
 
 #endif /* DS18B20_H_ */

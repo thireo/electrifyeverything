@@ -104,7 +104,7 @@ int main (void)
 	
 	while (1)
 	{
-		for (int i=0;i<sizeof(rx_buffer_array);i++)
+		for (uint8_t i=0;i<sizeof(rx_buffer_array);i++)
 		{
 			if (rx_buffer_array[i] == '\n')
 			{
@@ -163,7 +163,6 @@ int main (void)
 			delay_ms(300);
 			configure_pin(VALVE_CLOSE_PORT,VALVE_CLOSE_ADR,VALVE_CLOSE_PIN,false);
 			update_all_ports();
-			
 			system_interrupt_enable_global();
 		}
 	}

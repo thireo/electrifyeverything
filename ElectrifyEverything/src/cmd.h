@@ -20,16 +20,16 @@ uint8_t data_LED[2][8];
 bool port_update_ongoing;
 
 void data_handler(char buffer[]);
-void update_all_ports();
+void update_all_ports(void);
 void set_blinker(bool state, bool left, bool right);
 void party_lights(uint16_t party_vals[]);
-void flashy_flash1();
-void flashy_flash2();
-void flashy_fades();
-void reset_all_lights();
-bool a_okay();
+void flashy_flash1(void);
+void flashy_flash2(void);
+void flashy_fades(void);
+void reset_all_lights(void);
+bool a_okay(void);
 void configure_pin(uint8_t port, uint8_t addr, uint8_t pin, bool value);
-void mcp23017_reset_error_codes();
+void mcp23017_reset_error_codes(void);
 
 
 
@@ -77,6 +77,7 @@ void mcp23017_reset_error_codes();
 #define SOUND_9_OFF "SB09 0"
 #define SOUND_10_ON "SB10 1"
 #define SOUND_10_OFF "SB10 0"
+#define SOUND_RESET "SBRST 42"
 
 #define PARTY_ON "PRT 1"
 #define PARTY_OFF "PRT 0"
@@ -223,17 +224,17 @@ void mcp23017_reset_error_codes();
 #define VALVE_CLOSE_ADR 5
 #define VALVE_CLOSE_PORT 0
 
-#define CABIN_FRONT_LEFT_PIN 2
-#define CABIN_FRONT_LEFT_ADR 5
-#define CABIN_FRONT_LEFT_PORT 0
+#define CABIN_FRONT_PIN 2
+#define CABIN_FRONT_ADR 5
+#define CABIN_FRONT_PORT 0
 
-#define CABIN_FRONT_RIGHT_PIN 3
-#define CABIN_FRONT_RIGHT_ADR 5
-#define CABIN_FRONT_RIGHT_PORT 0
+#define CABIN_MIDDLE_PIN 3
+#define CABIN_MIDDLE_ADR 5
+#define CABIN_MIDDLE_PORT 0
 
-#define CABIN_BACKSEAT_PIN 4
-#define CABIN_BACKSEAT_ADR 5
-#define CABIN_BACKSEAT_PORT 0
+#define CABIN_BACK_PIN 4
+#define CABIN_BACK_ADR 5
+#define CABIN_BACK_PORT 0
 
 #define party_treshold 2500
 

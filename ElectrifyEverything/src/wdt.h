@@ -11,9 +11,9 @@
 
 #include "asf.h"
 
-void wdt_init();
-void wdt_init_cb();
-void wdt_early_cb();
+void wdt_init(void);
+void wdt_init_cb(void);
+void wdt_early_cb(void);
 
 
 

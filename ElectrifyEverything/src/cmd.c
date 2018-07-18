@@ -159,10 +159,6 @@ void data_handler(char buffer[])
 
 	if(strncmp(buffer,FLASH_ALL_ON,4) == 0)
 	{
-		configure_pin(POSITION_FRONT_LEFT_ADR,POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_PIN,true);
-
-
-
 		configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR, POSITION_FRONT_LEFT_PIN,true);
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR, POSITION_FRONT_RIGHT_PIN,true);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR, POSITION_REAR_LEFT_PIN,true);
@@ -188,9 +184,9 @@ void data_handler(char buffer[])
 		
 		configure_pin(LEDBAR_PORT,LEDBAR_ADR, LEDBAR_PIN,true);
 		
-		configure_pin(CABIN_FRONT_RIGHT_PORT,CABIN_FRONT_RIGHT_ADR,CABIN_FRONT_RIGHT_PIN,true);
-		configure_pin(CABIN_FRONT_LEFT_PORT,CABIN_FRONT_LEFT_ADR,CABIN_FRONT_LEFT_PIN,true);
-		configure_pin(CABIN_BACKSEAT_PORT,CABIN_BACKSEAT_ADR,CABIN_BACKSEAT_PIN,true);
+		configure_pin(CABIN_MIDDLE_PORT,CABIN_MIDDLE_ADR,CABIN_MIDDLE_PIN,true);
+		configure_pin(CABIN_FRONT_PORT,CABIN_FRONT_ADR,CABIN_FRONT_PIN,true);
+		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,true);
 		
 		flash_all = true;
 	}
@@ -221,9 +217,9 @@ void data_handler(char buffer[])
 		
 		configure_pin(LEDBAR_PORT,LEDBAR_ADR,LEDBAR_PIN,false);
 		
-		configure_pin(CABIN_FRONT_RIGHT_PORT,CABIN_FRONT_RIGHT_ADR,CABIN_FRONT_RIGHT_PIN,false);
-		configure_pin(CABIN_FRONT_LEFT_PORT,CABIN_FRONT_LEFT_ADR,CABIN_FRONT_LEFT_PIN,false);
-		configure_pin(CABIN_BACKSEAT_PORT,CABIN_BACKSEAT_ADR,CABIN_BACKSEAT_PIN,false);
+		configure_pin(CABIN_MIDDLE_PORT,CABIN_MIDDLE_ADR,CABIN_MIDDLE_PIN,false);
+		configure_pin(CABIN_FRONT_PORT,CABIN_FRONT_ADR,CABIN_FRONT_PIN,false);
+		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,false);
 		
 		flash_all = false;
 	}
@@ -374,6 +370,11 @@ void data_handler(char buffer[])
 	else if(strncmp(buffer,SOUND_10_OFF,6) == 0)
 	{
 		release_sb_btn(SB_PIN_BTN10);
+	}
+	else if (strncmp(buffer,SOUND_RESET,sizeof(SOUND_RESET)-1))
+	{
+		ble_uart_write("SB: RESETTING");
+		sounds_reset();
 	}
 	else if(strncmp(buffer,PARTY_ON,5) == 0)
 	{
@@ -669,9 +670,9 @@ void party_lights(uint16_t party_vals[])
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,true);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR,POSITION_REAR_LEFT_PIN,true);
 		
-		configure_pin(CABIN_FRONT_RIGHT_PORT,CABIN_FRONT_RIGHT_ADR,CABIN_FRONT_RIGHT_PIN,true);
-		configure_pin(CABIN_FRONT_LEFT_PORT,CABIN_FRONT_LEFT_ADR,CABIN_FRONT_LEFT_PIN,true);
-		configure_pin(CABIN_BACKSEAT_PORT,CABIN_BACKSEAT_ADR,CABIN_BACKSEAT_PIN,true);	}
+		configure_pin(CABIN_MIDDLE_PORT,CABIN_MIDDLE_ADR,CABIN_MIDDLE_PIN,true);
+		configure_pin(CABIN_FRONT_PORT,CABIN_FRONT_ADR,CABIN_FRONT_PIN,true);
+		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,true);	}
 	else
 	{
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR, POSITION_FRONT_RIGHT_PIN,false);
@@ -679,9 +680,9 @@ void party_lights(uint16_t party_vals[])
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,false);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR, POSITION_REAR_LEFT_PIN,false);
 		
-		configure_pin(CABIN_FRONT_RIGHT_PORT,CABIN_FRONT_RIGHT_ADR,CABIN_FRONT_RIGHT_PIN,false);
-		configure_pin(CABIN_FRONT_LEFT_PORT,CABIN_FRONT_LEFT_ADR,CABIN_FRONT_LEFT_PIN,false);
-		configure_pin(CABIN_BACKSEAT_PORT,CABIN_BACKSEAT_ADR,CABIN_BACKSEAT_PIN,false);
+		configure_pin(CABIN_MIDDLE_PORT,CABIN_MIDDLE_ADR,CABIN_MIDDLE_PIN,false);
+		configure_pin(CABIN_FRONT_PORT,CABIN_FRONT_ADR,CABIN_FRONT_PIN,false);
+		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,false);
 	}
 	if (party_vals[2] > party_thresholds[2])
 	{
@@ -918,10 +919,10 @@ void flashy_flash2()
 
 void flashy_fades()
 {
-	static uint8_t pwm_val = 0;
-	static uint8_t duty_cycle = 10;
+	//static uint8_t pwm_val = 0;
+	static uint8_t duty_cycle = PWM_FREQ/4;
 	
-	if (pwm_val > duty_cycle)
+	if (pwm_count > duty_cycle)
 	{
 		configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR,POSITION_FRONT_LEFT_PIN,true);
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,true);
@@ -966,14 +967,14 @@ void flashy_fades()
 		configure_pin(FOG_FRONT_LEFT_PORT,FOG_FRONT_LEFT_ADR, FOG_FRONT_LEFT_PIN,false);
 	}
 	
-	pwm_val++;
-	if (pwm_val >= PWM_FREQ)
+	//pwm_val++;
+	if (pwm_count >= PWM_FREQ)
 	{
-		pwm_val = 0;
-		duty_cycle += 10;
+		//pwm_val = 0;
+		duty_cycle += PWM_FREQ/10;
 		if (duty_cycle >= PWM_FREQ)
 		{
-			duty_cycle = 10;
+			duty_cycle = PWM_FREQ/4;
 		}
 	}
 	
@@ -983,8 +984,8 @@ void reset_all_lights()
 {
 	for (int i=0;i<8;i++)
 	{
-		data_LED[0][i] = 0x80;
-		data_LED[1][i] = 0x80;
+		mcp23017_data.devices[i].outputs.ports[0] = 0x80;
+		mcp23017_data.devices[i].outputs.ports[1] = 0x80;
 	}
 }
 

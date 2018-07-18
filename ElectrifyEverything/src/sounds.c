@@ -87,7 +87,7 @@ void select_soundboard(void)
 
 void press_sb_btn_once(uint8_t btn)
 {
-	sounds_reset();
+	//sounds_reset();
 	/*for (int i=0;i<11;i++)
 	{
 		if (i+11 == btn)

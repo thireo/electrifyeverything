@@ -75,6 +75,6 @@ void sounds_uart_clk_init(void);
 void sounds_uart_pin_init(void);
 void sounds_uart_init(void);
 void sounds_uart_write(char buffer[]);
-void sounds_reset_buffers();
+void sounds_reset_buffers(void);
 
 #endif /* SOUNDS_H_ */

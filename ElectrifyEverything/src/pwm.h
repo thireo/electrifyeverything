@@ -24,9 +24,9 @@ bool should_update;
 bool execute_order_66;
 
 struct tc_module tc_instance;
-void init_TC3();
-void TC3_Handler();
-void pwm_port();
+void init_TC3(void);
+void TC3_Handler(void);
+void pwm_port(void);
 void things_to_do(void);
 
 volatile int pwm_bob;

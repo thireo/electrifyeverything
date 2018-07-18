@@ -13,7 +13,7 @@
 #include "i2c.h"
 #include "uart.h"
 
-void pwm_port()
+void pwm_port(void)
 {
 	pwm_count = 0;
 	struct port_config config_port_pin;
@@ -23,7 +23,7 @@ void pwm_port()
 	port_pin_set_config(PIN_PA02,&config_port_pin);
 }
 
-void init_TC3()
+void init_TC3(void)
 {	
 	PM->APBCMASK.reg |= PM_APBCMASK_TC3;
 

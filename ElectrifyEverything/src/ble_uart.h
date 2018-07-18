@@ -42,7 +42,7 @@
 
 volatile char rx_buffer_array[128];
 volatile static int buff_count;
-void reset_buffers();
+void reset_buffers(void);
 
 
 void uart_clk_init(void);
