@@ -371,7 +371,7 @@ void data_handler(char buffer[])
 	{
 		release_sb_btn(SB_PIN_BTN10);
 	}
-	else if (strncmp(buffer,SOUND_RESET,sizeof(SOUND_RESET)-1))
+	else if (strncmp(buffer,SOUND_RESET,sizeof(SOUND_RESET)-1) == 0)
 	{
 		ble_uart_write("SB: RESETTING");
 		sounds_reset();
