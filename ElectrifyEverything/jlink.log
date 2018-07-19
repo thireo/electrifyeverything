@@ -1,5 +1,6 @@
-T36B4 919:148 SEGGER J-Link V6.32g Log File (0001ms, 83765ms total)
-T36B4 919:148 DLL Compiled: Jun 15 2018 17:26:15 (0001ms, 83765ms total)
-T36B4 919:148 Logging started @ 2018-07-19 16:50 (0001ms, 83765ms total)
-T36B4 919:156 JLINK_ExecCommand("Device = ATSAMD21G18A", ...). 
-  ***** API Error: API JLINK_ExecCommand function called before JLINKARM_Open()
+T48F8 445:680 SEGGER J-Link V6.32g Log File (0001ms, 2716ms total)
+T48F8 445:680 DLL Compiled: Jun 15 2018 17:26:15 (0001ms, 2716ms total)
+T48F8 445:680 Logging started @ 2018-07-19 19:08 (0001ms, 2716ms total)
+T48F8 445:689 JLINK_Close() (0003ms, 2719ms total)
+T48F8 445:689  (0003ms, 2719ms total)
+T48F8 445:689 Closed (0003ms, 2719ms total)

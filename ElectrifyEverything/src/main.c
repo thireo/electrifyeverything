@@ -93,7 +93,7 @@ int main (void)
 	
 	//party = true;
 	
-	party_thresholds[0] = 1375;
+	party_thresholds[0] = 1500;//1375;
 	party_thresholds[1] = 1550;
 	party_thresholds[2] = 1400;
 	party_thresholds[3] = 2500;
