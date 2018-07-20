@@ -30,7 +30,7 @@ void reset_all_lights(void);
 bool a_okay(void);
 void configure_pin(uint8_t port, uint8_t addr, uint8_t pin, bool value);
 void mcp23017_reset_error_codes(void);
-
+void party_lights_2(uint16_t party_vals[],uint8_t band);
 
 
 
@@ -121,7 +121,7 @@ void mcp23017_reset_error_codes(void);
 #define CUT_OUT_VALVE_ON "COV 1"
 #define CUT_OUT_VALVE_OFF "COV 0"
 
-
+#define PARTY_REV2 "PRTRV2"
 
 //ADDR 001
 #define POSITION_FRONT_LEFT_PIN 0

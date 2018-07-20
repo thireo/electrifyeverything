@@ -14,6 +14,35 @@ char test_bob[] = "PWM";
 #include "sounds.h"
 #include "uart.h"
 
+bool bool_map_1[26][8] = {
+	{false,false,false,false,false,false,false,false},
+	{false,true,false,false,false,false,false,false},
+	{false,false,true,false,false,false,false,false},
+	{false,false,false,true,false,false,false,false},
+	{false,false,false,false,true,false,false,false},
+	{false,false,false,false,false,true,false,false},
+	{false,false,false,false,false,false,true,false},
+	{false,false,false,false,false,false,false,true},
+	{false,false,false,false,false,false,true,false},
+	{false,false,false,false,false,true,false,false},
+	{false,false,false,false,true,false,false,false},
+	{false,false,false,true,false,false,false,false},
+	{false,false,true,false,false,false,false,false},
+	{false,true,false,false,false,false,false,false},
+	{true,false,false,false,false,false,false,false},
+	{false,false,false,true,true,false,false,false},
+	{false,false,true,false,false,true,false,false},
+	{false,true,false,false,false,false,true,false},
+	{true,false,false,false,false,false,false,true},
+	{false,true,false,false,false,false,true,false},
+	{false,false,true,false,false,true,false,false},
+	{false,false,false,true,true,false,false,false},
+	{false,false,false,false,false,false,false,false},
+	{false,false,false,true,true,false,false,false},
+	{false,false,false,false,false,false,false,false},
+	{true,true,true,true,true,true,true,true},
+};
+
 
 typedef union
 {
@@ -555,21 +584,17 @@ void data_handler(char buffer[])
 		valve_open = false;
 		valve_close = true;
 	}
+	else if(strncmp(buffer,PARTY_REV2,sizeof(PARTY_REV2)-1) == 0)
+	{
+		uint8_t temp;
+		sscanf(buffer,"PRTRV2 %d",&temp);
+		party_band_chosen = temp;
+	}
 	ble_uart_write("ACK");
 }
 
 void update_all_ports()
 {
-
-	/*if (flash_all)
-	{
-		data[1] = 0xFF;
-	}
-	else
-	{
-		data[1] = 0x00;
-	}*/
-
 	if (!port_update_ongoing)
 	{
 		port_update_ongoing = true;
@@ -578,48 +603,9 @@ void update_all_ports()
 			mcp23017_data.devices[i].outputs.pa7 = 1;
 			mcp23017_data.devices[i].outputs.pb7 = 1;
 			mcp23017_data.devices[i].status = mcp23017_set_pins(MCP23017_I2C_ADDR_000+i,mcp23017_data.devices[i].outputs.ports[0],mcp23017_data.devices[i].outputs.ports[1]);
-			//data_LED[0][i] |= 0x80;
-			//data_LED[1][i] |= 0x80;
 		}
 		port_update_ongoing = false;
 	}
-
-
-
-/*
-	for (int i=0;i<8;i++)
-	{
-		data_LED[0][i] |= 0x80;
-		data_LED[1][i] |= 0x80;
-	}
-
-	
-	
-	mcp23017_set_pins(MCP23017_I2C_ADDR_000,data_LED[0][0],data_LED[1][0]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_001,data_LED[0][1],data_LED[1][1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_010,data_LED[0][2],data_LED[1][2]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_011,data_LED[0][3],data_LED[1][3]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_100,data_LED[0][4],data_LED[1][4]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_101,data_LED[0][5],data_LED[1][5]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_110,data_LED[0][6],data_LED[1][6]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_111,data_LED[0][7],data_LED[1][7]);
-	*/
-	
-	/*
-	mcp23017_set_pins(MCP23017_I2C_ADDR_000,(uint8_t)data[1],(uint8_t)data[1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_001,(uint8_t)data[1],(uint8_t)data[1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_010,(uint8_t)data[1],(uint8_t)data[1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_011,(uint8_t)data[1],(uint8_t)data[1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_100,(uint8_t)data[1],(uint8_t)data[1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_101,(uint8_t)data[1],(uint8_t)data[1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_110,(uint8_t)data[1],(uint8_t)data[1]);
-	mcp23017_set_pins(MCP23017_I2C_ADDR_111,(uint8_t)data[1],(uint8_t)data[1]);*/
-	
-	/*
-	for(int i=0;i<8;i++)
-	{
-		mcp23017_set_pins(MCP23017_I2C_ADDR_000+i,(uint8_t)data[1],(uint8_t)data[1]);
-	}*/
 }
 
 void set_blinker(bool state, bool left, bool right)
@@ -651,8 +637,7 @@ void party_lights(uint16_t party_vals[])
 		configure_pin(SUB_RIGHT_PORT,SUB_RIGHT_ADR,SUB_RIGHT_PIN,true);
 		configure_pin(REVERSE_RIGHT_PORT,REVERSE_RIGHT_ADR,REVERSE_RIGHT_PIN,true);
 		configure_pin(REVERSE_LEFT_PORT,REVERSE_LEFT_ADR,REVERSE_LEFT_PIN,true);
-		//configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,true);
-		//configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_LEFT_ADR,HIGH_BEAM_LEFT_PIN,true);
+		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,true);
 	}
 	else
 	{
@@ -660,8 +645,7 @@ void party_lights(uint16_t party_vals[])
 		configure_pin(SUB_RIGHT_PORT,SUB_RIGHT_ADR, SUB_RIGHT_PIN,false);
 		configure_pin(REVERSE_RIGHT_PORT,REVERSE_RIGHT_ADR, REVERSE_RIGHT_PIN,false);
 		configure_pin(REVERSE_LEFT_PORT,REVERSE_LEFT_ADR, REVERSE_LEFT_PIN,false);
-		//configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_RIGHT_ADR, HIGH_BEAM_RIGHT_PIN,false);
-		//configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_LEFT_ADR, HIGH_BEAM_LEFT_PIN,false);
+		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,false);
 	}
 	if (party_vals[1] > party_thresholds[1])
 	{
@@ -681,13 +665,11 @@ void party_lights(uint16_t party_vals[])
 	{
 		configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_RIGHT_ADR,LOW_BEAM_RIGHT_PIN,true);
 		configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR,LOW_BEAM_LEFT_PIN,true);
-		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,true);
 	}
 	else
 	{
 		configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_RIGHT_ADR, LOW_BEAM_RIGHT_PIN,false);
 		configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR, LOW_BEAM_LEFT_PIN,false);
-		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,false);
 	}
 	if (party_vals[3] > party_thresholds[3])
 	{
@@ -734,6 +716,26 @@ void party_lights(uint16_t party_vals[])
 	}
 }
 
+void party_lights_2(uint16_t party_vals[],uint8_t band)
+{
+	reset_all_lights();
+	configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR,LOW_BEAM_LEFT_PIN,party_vals[band]>party_thresholds[band]);
+	configure_pin(LOW_BEAM_RIGHT_PORT,LOW_BEAM_RIGHT_ADR,LOW_BEAM_RIGHT_PIN,party_vals[band]>party_thresholds[band]);
+
+	configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_LEFT_ADR,HIGH_BEAM_LEFT_PIN,party_vals[band]>party_thresholds[band]+100);
+	configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,party_vals[band]>party_thresholds[band]+100);
+	configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR,POSITION_REAR_LEFT_PIN,party_vals[band]>party_thresholds[band]+100);
+	configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,party_vals[band]>party_thresholds[band]+100);
+
+	configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,party_vals[band]>party_thresholds[band]+200);
+	configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR,POSITION_FRONT_LEFT_PIN,party_vals[band]>party_thresholds[band]+200);
+	configure_pin(REVERSE_LEFT_PORT,REVERSE_LEFT_ADR,REVERSE_LEFT_PIN,party_vals[band]>party_thresholds[band]+200);
+	configure_pin(REVERSE_RIGHT_PORT,REVERSE_RIGHT_ADR,REVERSE_RIGHT_PIN,party_vals[band]>party_thresholds[band]+200);
+
+	configure_pin(BLINK_LEFT_PORT,BLINK_LEFT_ADR,BLINK_LEFT_PIN,party_vals[band]>party_thresholds[band]+300);
+	configure_pin(BLINK_RIGHT_PORT,BLINK_RIGHT_ADR,BLINK_RIGHT_PIN,party_vals[band]>party_thresholds[band]+300);
+}
+
 void flashy_flash1()
 {
 	static uint8_t state = 0;
@@ -741,103 +743,63 @@ void flashy_flash1()
 	{
 		case 0:
 			reset_all_lights();
-			configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,true);
-			state++;
+			configure_pin(LOW_BEAM_RIGHT_PORT,LOW_BEAM_RIGHT_ADR,LOW_BEAM_RIGHT_PIN,true);
 			break;
 		case 1:
-			configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR, HIGH_BEAM_RIGHT_PIN,false);
-			configure_pin(LOW_BEAM_RIGHT_PORT,LOW_BEAM_RIGHT_ADR,LOW_BEAM_RIGHT_PIN,true);
-			state++;
+			reset_all_lights();
+			configure_pin(HIGH_BEAM_RIGHT_PORT,HIGHBEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,true);
 			break;
 		case 2:
-			configure_pin(LOW_BEAM_RIGHT_PORT,LOW_BEAM_RIGHT_ADR, LOW_BEAM_RIGHT_PIN,false);
+			reset_all_lights();
 			configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,true);
-			state++;
 			break;
 		case 3:
-			configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR, POSITION_FRONT_RIGHT_PIN,false);
+			reset_all_lights();
 			configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR,POSITION_FRONT_LEFT_PIN,true);
 			state++;
 			break;
 		case 4:
-			configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR, POSITION_FRONT_LEFT_PIN,false);
-			configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR,LOW_BEAM_LEFT_PIN,true);
-			state++;
+			reset_all_lights();
+			configure_pin(HIGH_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR,LOW_BEAM_LEFT_PIN,true);
 			break;
 		case 5:
-			configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR, LOW_BEAM_LEFT_PIN,false);
-			configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_LEFT_ADR,HIGH_BEAM_LEFT_PIN,true);
-			state++;
+			reset_all_lights();
+			configure_pin(LOW_BEAM_LEFT_PORT,HIGH_BEAM_LEFT_ADR,HIGH_BEAM_LEFT_PIN,true);
 			break;
 		case 6:
-			configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_LEFT_ADR, HIGH_BEAM_LEFT_PIN,false);
+			reset_all_lights();
 			configure_pin(BLINK_LEFT_PORT,BLINK_LEFT_ADR,BLINK_LEFT_PIN,true);
-			state++;
 			break;
 		case 7:
-			configure_pin(BLINK_LEFT_PORT,BLINK_LEFT_ADR, BLINK_LEFT_PIN,false);
+			reset_all_lights();
 			configure_pin(REVERSE_LEFT_PORT,REVERSE_LEFT_ADR,REVERSE_LEFT_PIN,true);
-			state++;
 			break;
 		case 8:
-			configure_pin(REVERSE_LEFT_PORT,REVERSE_LEFT_ADR, REVERSE_LEFT_PIN,false);
+			reset_all_lights();
 			configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR,POSITION_REAR_LEFT_PIN,true);
-			state++;
 			break;
 		case 9:
-			configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR, POSITION_REAR_LEFT_PIN,false);
-			configure_pin(REVERSE_RIGHT_PORT,REVERSE_RIGHT_ADR,REVERSE_RIGHT_PIN,true);
-			state++;
+			reset_all_lights();
+			configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,true);
 			break;
 		case 10:
-			configure_pin(REVERSE_RIGHT_PORT,REVERSE_RIGHT_ADR, REVERSE_RIGHT_PIN,false);
-			configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,true);
-			state++;
+			reset_all_lights();
+			configure_pin(REVERSE_RIGHT_PORT,REVERSE_RIGHT_ADR,REVERSE_RIGHT_PIN,true);
 			break;
 		case 11:
-			configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,false);
+			reset_all_lights();
 			configure_pin(BLINK_RIGHT_PORT,BLINK_RIGHT_ADR,BLINK_RIGHT_PIN,true);
-			state++;
 			break;
-		/*case 12:
-			configure_pin(BLINK_RIGHT_PORT,BLINK_RIGHT_ADR, BLINK_RIGHT_PIN,false);
-			configure_pin(LEDBAR_PORT,LEDBAR_ADR,LEDBAR_PIN,true);
-			state++;
-			break;
-		case 13:
-			configure_pin(LEDBAR_PORT,LEDBAR_ADR, LEDBAR_PIN,false);
-			state++;
-			break;
-		case 14:
-			configure_pin(LEDBAR_PORT,LEDBAR_ADR,LEDBAR_PIN,true);
-			state++;
-			break;
-		case 15:
-			configure_pin(LEDBAR_PORT,LEDBAR_ADR, LEDBAR_PIN,false);
-			state++;
-			break;
-		case 16:
-			configure_pin(LEDBAR_PORT,LEDBAR_ADR,LEDBAR_PIN,true);
-			state++;
-			break;
-		case 17:
-			configure_pin(LEDBAR_PORT,LEDBAR_ADR, LEDBAR_PIN,false);
-			state++;
-			break;
-		case 18:
-			configure_pin(LEDBAR_PORT,LEDBAR_ADR,LEDBAR_PIN,true);
-			state++;
-			break;*/
-		case 19:
+		case 12:
 			reset_all_lights();
 			state = 0;
 			break;
-			
 		default:
 			reset_all_lights();
 			state = 0;
 			break;
 	}
+	state++;
 }
 
 void flashy_flash2()
@@ -977,7 +939,27 @@ void flashy_fades()
 			duty_cycle = PWM_FREQ/4;
 		}
 	}
+}
+
+void flashy_flash3(void)
+{
+	static uint8_t count = 0;
 	
+	reset_all_lights();
+
+	configure_pin(BLINK_LEFT_PORT,BLINK_LEFT_ADR,BLINK_LEFT_PIN,bool_map_1[count][0]);
+	configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR,LOW_BEAM_LEFT_PIN,bool_map_1[count][1]);
+	configure_pin(HIGH_BEAM_LEFT_PORT,HIGH_BEAM_LEFT_ADR,HIGH_BEAM_LEFT_PIN,bool_map_1[count][2]);
+	configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR,POSITION_FRONT_LEFT_PIN,bool_map_1[count][3]);
+	configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,bool_map_1[count][4]);
+	configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,bool_map_1[count][5]);
+	configure_pin(LOW_BEAM_RIGHT_PORT,LOW_BEAM_RIGHT_ADR,LOW_BEAM_RIGHT_PIN,bool_map_1[count][6]);
+	configure_pin(BLINK_RIGHT_PORT,BLINK_RIGHT_ADR,BLINK_RIGHT_PIN,bool_map_1[count][7]);
+	count++;
+	if(count > 25)
+	{
+		count = 0;
+	}
 }
 
 void reset_all_lights()

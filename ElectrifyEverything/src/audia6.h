@@ -39,5 +39,8 @@ volatile bool flashy1;
 volatile bool flashy2;
 volatile bool flashyfade;
 
+volatile bool partyrev2;
+volatile uint8_t party_band_chosen;
+
 volatile bool valve_open;
 volatile bool valve_close;

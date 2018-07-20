@@ -96,6 +96,14 @@ void things_to_do(void)
 		uart_write(&buffer);
 		
 	}
+	if (partyrev2)
+	{
+		msgeq7_all_bands(values_bands);
+		party_lights_2(values_bands,party_band_chosen);
+		sprintf(buffer,"%04d %04d %04d %04d %04d %04d\r\n",values_bands[0],values_bands[1],values_bands[2],values_bands[3],values_bands[4],values_bands[5]);
+		uart_write(&buffer);
+		
+	}
 	if ((pwm_count % 25) == 0)
 	{
 		if (flashy2)
