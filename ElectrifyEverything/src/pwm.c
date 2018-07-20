@@ -106,13 +106,17 @@ void things_to_do(void)
 	}
 	if ((pwm_count % 25) == 0)
 	{
-		if (flashy2)
+		if (flashy1)
 		{
 			flashy_flash1();
 		}
-		else if (flashy1)
+		else if (flashy2)
 		{
 			flashy_flash2();
+		}
+		else if (flashy3)
+		{
+			flashy_flash3();
 		}
 	}
 	if (flashyfade)

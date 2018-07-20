@@ -106,6 +106,9 @@ void party_lights_2(uint16_t party_vals[],uint8_t band);
 #define FLASHY2_ON "FLSH2 1"
 #define FLASHY2_OFF "FLSH2 0"
 
+#define FLASHY3_ON "FLSH3 1"
+#define FLASHY3_OFF "FLSH3 0"
+
 #define FLASHYFADE_ON "FLSHFD 1"
 #define FLASHYFADE_OFF "FLSHFD 0"
 

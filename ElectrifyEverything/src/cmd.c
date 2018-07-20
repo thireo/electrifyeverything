@@ -498,6 +498,15 @@ void data_handler(char buffer[])
 		reset_all_lights();
 		flashy2 = false;
 	}
+	else if(strncmp(buffer,FLASHY3_ON,7) == 0)
+	{
+		flashy3 = true;
+	}
+	else if(strncmp(buffer,FLASHY3_OFF,7) == 0)
+	{
+		reset_all_lights();
+		flashy3 = false;
+	}
 	else if(strncmp(buffer,FLASHYFADE_ON,8) == 0)
 	{
 		flashyfade = true;
