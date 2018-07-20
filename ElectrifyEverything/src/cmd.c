@@ -756,7 +756,7 @@ void flashy_flash1()
 			break;
 		case 1:
 			reset_all_lights();
-			configure_pin(HIGH_BEAM_RIGHT_PORT,HIGHBEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,true);
+			configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,true);
 			break;
 		case 2:
 			reset_all_lights();
