@@ -124,7 +124,8 @@ void flashy_flash3(void);
 #define CUT_OUT_VALVE_ON "COV 1"
 #define CUT_OUT_VALVE_OFF "COV 0"
 
-#define PARTY_REV2 "PRTRV2"
+#define PARTY_REV2_ON "PRTRV21"
+#define PARTY_REV2_OFF "PRTRV20"
 
 //ADDR 001
 #define POSITION_FRONT_LEFT_PIN 0

@@ -40,7 +40,7 @@ bool bool_map_1[26][8] = {
 	{false,false,false,false,false,false,false,false},
 	{false,false,false,true,true,false,false,false},
 	{false,false,false,false,false,false,false,false},
-	{true,true,true,true,true,true,true,true},
+	{true,true,true,true,true,true,true,true}
 };
 
 
@@ -593,11 +593,16 @@ void data_handler(char buffer[])
 		valve_open = false;
 		valve_close = true;
 	}
-	else if(strncmp(buffer,PARTY_REV2,sizeof(PARTY_REV2)-1) == 0)
+	else if(strncmp(buffer,PARTY_REV2_ON,sizeof(PARTY_REV2_ON)-1) == 0)
 	{
 		uint8_t temp;
-		sscanf(buffer,"PRTRV2 %d",&temp);
+		sscanf(buffer,"PRTRV21 %d",&temp);
 		party_band_chosen = temp;
+		partyrev2 = true;
+	}
+	else if(strncmp(buffer,PARTY_REV2_OFF,sizeof(PARTY_REV2_OFF)-1) == 0)
+	{
+		partyrev2 = false;
 	}
 	ble_uart_write("ACK");
 }
