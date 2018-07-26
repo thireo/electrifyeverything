@@ -32,6 +32,7 @@ void configure_pin(uint8_t port, uint8_t addr, uint8_t pin, bool value);
 void mcp23017_reset_error_codes(void);
 void party_lights_2(uint16_t party_vals[],uint8_t band);
 void flashy_flash3(void);
+void mcp23017_check_all(void);
 
 
 #define FLASH_ALL_ON "FHA1"

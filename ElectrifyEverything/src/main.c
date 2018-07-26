@@ -126,7 +126,9 @@ int main (void)
 		if (execute_order_66)
 		{
 			system_interrupt_disable_global();
+			ble_uart_write("EXEC ORDER 66\n");
 			execute_order_66 = false;
+			init_all_ports();
 			a_okay();
 			system_interrupt_enable_global();
 		}
@@ -166,6 +168,12 @@ int main (void)
 			configure_pin(VALVE_CLOSE_PORT,VALVE_CLOSE_ADR,VALVE_CLOSE_PIN,false);
 			update_all_ports();
 			system_interrupt_enable_global();
+		}
+		
+		if (should_check)
+		{
+			should_check = false;
+			mcp23017_check_all();
 		}
 	}
 }

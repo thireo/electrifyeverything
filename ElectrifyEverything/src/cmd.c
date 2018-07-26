@@ -678,6 +678,7 @@ void update_all_ports()
 	if (!port_update_ongoing)
 	{
 		port_update_ongoing = true;
+		init_all_ports();
 		for (int i=0;i<8;i++)
 		{
 			mcp23017_data.devices[i].outputs.pa7 = 1;
@@ -1111,5 +1112,24 @@ void mcp23017_reset_error_codes()
 		mcp23017_data.devices[i].output_errors.ports[1] = 0;
 		mcp23017_data.devices[i].error_detected = false;
 		mcp23017_data.devices[i].status = STATUS_OK;
+	}
+}
+
+void mcp23017_check_all()
+{
+	bool returnVal = false;
+	uint8_t buffer[32];
+	for (int i=0;i<8;i++)
+	{
+		if (mcp23017_data.devices[i].should_be_enabled & mcp23017_data.devices[i].status != STATUS_OK)
+		{
+			sprintf(buffer,"E: %d - %d\n",i,mcp23017_data.devices[i].status);
+			ble_uart_write(buffer);
+			returnVal = true;
+		}
+	}
+	if (!returnVal)
+	{
+		ble_uart_write("ALL OK");
 	}
 }

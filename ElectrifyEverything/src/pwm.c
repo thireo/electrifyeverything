@@ -68,6 +68,10 @@ void TC3_Handler()
 				execute_order_66 = true;
 			}*/
 			seconds++;
+			if ((seconds % 5) == 0)
+			{
+				should_check = true;
+			}
 			//uint8_t *ptr = &read_data[0][0];
 			//a_okayish = a_okay(read_data);
 			/*set_blinker(blink_state, blink_left,blink_right);

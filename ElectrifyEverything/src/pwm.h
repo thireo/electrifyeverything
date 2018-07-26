@@ -22,6 +22,7 @@ int pwm_count;
 int seconds;
 bool should_update;
 bool execute_order_66;
+bool should_check;
 
 struct tc_module tc_instance;
 void init_TC3(void);
