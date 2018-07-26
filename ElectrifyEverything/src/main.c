@@ -125,8 +125,10 @@ int main (void)
 		}
 		if (execute_order_66)
 		{
+			system_interrupt_disable_global();
 			execute_order_66 = false;
 			a_okay();
+			system_interrupt_enable_global();
 		}
 		
 		if (valve_open)

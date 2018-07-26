@@ -218,6 +218,9 @@ void data_handler(char buffer[])
 		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,true);
 		
 		flash_all = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASH_ALL_OFF,4) == 0)
 	{
@@ -251,6 +254,9 @@ void data_handler(char buffer[])
 		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,false);
 		
 		flash_all = false;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,BLINK_ALL_ON,5) == 0)
 	{
@@ -436,6 +442,9 @@ void data_handler(char buffer[])
 		configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR, HIGH_BEAM_RIGHT_PIN,true);
 		configure_pin(LEDBAR_PORT,LEDBAR_ADR, LEDBAR_PIN,true);
 		led_bar = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,LED_BAR_OFF,5) == 0)
 	{
@@ -443,6 +452,9 @@ void data_handler(char buffer[])
 		configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,false);
 		configure_pin(LEDBAR_PORT,LEDBAR_ADR,LEDBAR_PIN,false);
 		led_bar = false;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,HDL_ON,5) == 0)
 	{
@@ -452,6 +464,9 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR, POSITION_FRONT_RIGHT_PIN,true);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR, POSITION_REAR_LEFT_PIN,true);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,true);
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,HDL_OFF,5) == 0)
 	{
@@ -461,6 +476,9 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,false);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR,POSITION_REAR_LEFT_PIN,false);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,false);
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,BRIAN_ON,7) == 0)
 	{
@@ -470,6 +488,9 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR, POSITION_FRONT_RIGHT_PIN,true);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR, POSITION_REAR_LEFT_PIN,true);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,true);
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,BRIAN_OFF,7) == 0)
 	{
@@ -479,42 +500,69 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,false);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR,POSITION_REAR_LEFT_PIN,false);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,false);
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHY1_ON,7) == 0)
 	{
 		flashy1 = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHY1_OFF,7) == 0)
 	{
 		flashy1 = false;
 		reset_all_lights();
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHY2_ON,7) == 0)
 	{
 		flashy2 = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHY2_OFF,7) == 0)
 	{
 		reset_all_lights();
 		flashy2 = false;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHY3_ON,7) == 0)
 	{
 		flashy3 = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHY3_OFF,7) == 0)
 	{
 		reset_all_lights();
 		flashy3 = false;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHYFADE_ON,8) == 0)
 	{
 		flashyfade = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,FLASHYFADE_OFF,8) == 0)
 	{
 		reset_all_lights();
 		flashyfade = false;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if (strncmp(buffer,MASTER_RESET,10) == 0)
 	{
@@ -587,11 +635,17 @@ void data_handler(char buffer[])
 	{
 		valve_open = true;
 		valve_close = false;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if (strncmp(buffer,CUT_OUT_VALVE_OFF,sizeof(CUT_OUT_VALVE_OFF)-1) == 0)
 	{
 		valve_open = false;
 		valve_close = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,PARTY_REV2_ON,sizeof(PARTY_REV2_ON)-1) == 0)
 	{
@@ -599,12 +653,24 @@ void data_handler(char buffer[])
 		sscanf(buffer,"PRTRV21 %d",&temp);
 		party_band_chosen = temp;
 		partyrev2 = true;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,PARTY_REV2_OFF,sizeof(PARTY_REV2_OFF)-1) == 0)
 	{
 		partyrev2 = false;
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
 	}
-	ble_uart_write("ACK");
+	else if(strncmp(buffer,MASTER_TEST,sizeof(MASTER_TEST)-1) == 0)
+	{
+		ble_uart_write(buffer);
+		ble_uart_write(" - ");
+		ble_uart_write("ACK");
+		execute_order_66 = true;
+	}
 }
 
 void update_all_ports()
