@@ -11,7 +11,7 @@
 
 #include "asf.h"
 #define GCLK_FREQ 8000000
-#define PWM_FREQ 200
+#define PWM_FREQ 250
 #define COMPARE_MATCH (GCLK_FREQ/PWM_FREQ) 
 
 #if ((COMPARE_MATCH > 65535))
@@ -23,6 +23,7 @@ int seconds;
 bool should_update;
 bool execute_order_66;
 bool should_check;
+int should_updates;
 
 struct tc_module tc_instance;
 void init_TC3(void);

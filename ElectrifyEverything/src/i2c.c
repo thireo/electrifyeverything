@@ -121,3 +121,9 @@ uint8_t i2c_read(uint8_t addr,uint8_t reg, uint8_t data_length,uint8_t* data_ptr
 	}
 
 */
+
+void i2c_reset()
+{
+	i2c_master_reset(&i2c_master_instance);
+	configure_i2c_master();
+}

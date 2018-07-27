@@ -21,5 +21,6 @@ void configure_i2c_master(void);
 uint8_t i2c_write(uint8_t address,uint8_t* data, uint8_t data_size);
 int * i2c_addr_scan(void);
 uint8_t i2c_read(uint8_t addr,uint8_t reg, uint8_t data_length,uint8_t* data_ptr);
+void i2c_reset(void);
 
 #endif /* I2C_H_ */

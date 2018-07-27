@@ -146,9 +146,15 @@ void mcp23017_pin_init(void)
 void mcp23017_reset(void)
 {
 	port_pin_set_output_level(MCP23017_PWR_PIN, false);
-	delay_ms(1000);
+	delay_ms(250);
 	port_pin_set_output_level(MCP23017_PWR_PIN, true);
 	delay_ms(125);
 	init_all_ports();
 	//TODO pull PWR or RESET to MCP23017 ICs.
+}
+
+void mcp23017_bus_reset()
+{
+	i2c_reset();
+	init_all_ports();
 }

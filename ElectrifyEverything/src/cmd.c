@@ -458,48 +458,60 @@ void data_handler(char buffer[])
 	}
 	else if(strncmp(buffer,HDL_ON,5) == 0)
 	{
+		system_interrupt_disable_global();
 		configure_pin(LOW_BEAM_RIGHT_PORT,LOW_BEAM_RIGHT_ADR, LOW_BEAM_RIGHT_PIN,true);
 		configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR, LOW_BEAM_LEFT_PIN,true);
 		configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR, POSITION_FRONT_LEFT_PIN,true);
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR, POSITION_FRONT_RIGHT_PIN,true);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR, POSITION_REAR_LEFT_PIN,true);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,true);
+		mcp23017_reset();
+		system_interrupt_enable_global();
 		ble_uart_write(buffer);
 		ble_uart_write(" - ");
 		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,HDL_OFF,5) == 0)
 	{
+		system_interrupt_disable_global();
 		configure_pin(LOW_BEAM_RIGHT_PORT,LOW_BEAM_RIGHT_ADR,LOW_BEAM_RIGHT_PIN,false);
 		configure_pin(LOW_BEAM_LEFT_PORT,LOW_BEAM_LEFT_ADR,LOW_BEAM_LEFT_PIN,false);
 		configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR,POSITION_FRONT_LEFT_PIN,false);
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,false);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR,POSITION_REAR_LEFT_PIN,false);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,false);
+		mcp23017_reset();
+		system_interrupt_enable_global();
 		ble_uart_write(buffer);
 		ble_uart_write(" - ");
 		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,BRIAN_ON,7) == 0)
 	{
+		system_interrupt_disable_global();
 		configure_pin(FOG_FRONT_RIGHT_PORT,FOG_FRONT_RIGHT_ADR, FOG_FRONT_RIGHT_PIN,true);
 		configure_pin(FOG_FRONT_LEFT_PORT,FOG_FRONT_LEFT_ADR, FOG_FRONT_LEFT_PIN,true);
 		configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR, POSITION_FRONT_LEFT_PIN,true);
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR, POSITION_FRONT_RIGHT_PIN,true);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR, POSITION_REAR_LEFT_PIN,true);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,true);
+		mcp23017_reset();
+		system_interrupt_enable_global();
 		ble_uart_write(buffer);
 		ble_uart_write(" - ");
 		ble_uart_write("ACK");
 	}
 	else if(strncmp(buffer,BRIAN_OFF,7) == 0)
 	{
+		system_interrupt_disable_global();
 		configure_pin(FOG_FRONT_RIGHT_PORT,FOG_FRONT_RIGHT_ADR,FOG_FRONT_RIGHT_PIN,false);
 		configure_pin(FOG_FRONT_LEFT_PORT,FOG_FRONT_LEFT_ADR,FOG_FRONT_LEFT_PIN,false);
 		configure_pin(POSITION_FRONT_LEFT_PORT,POSITION_FRONT_LEFT_ADR,POSITION_FRONT_LEFT_PIN,false);
 		configure_pin(POSITION_FRONT_RIGHT_PORT,POSITION_FRONT_RIGHT_ADR,POSITION_FRONT_RIGHT_PIN,false);
 		configure_pin(POSITION_REAR_LEFT_PORT,POSITION_REAR_LEFT_ADR,POSITION_REAR_LEFT_PIN,false);
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,false);
+		mcp23017_reset();
+		system_interrupt_enable_global();
 		ble_uart_write(buffer);
 		ble_uart_write(" - ");
 		ble_uart_write("ACK");

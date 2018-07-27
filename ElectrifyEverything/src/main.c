@@ -128,7 +128,8 @@ int main (void)
 			system_interrupt_disable_global();
 			ble_uart_write("EXEC ORDER 66\n");
 			execute_order_66 = false;
-			init_all_ports();
+			//init_all_ports();
+			mcp23017_reset();
 			a_okay();
 			system_interrupt_enable_global();
 		}

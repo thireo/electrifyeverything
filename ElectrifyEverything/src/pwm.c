@@ -58,11 +58,17 @@ void TC3_Handler()
 	// Overflow interrupt triggered
 	if ( TC3->COUNT16.INTFLAG.bit.OVF == 1 )
 	{
-		should_update = true;	
+		if ((pwm_count % 5) == 0)
+		{
+			should_update = true;
+			should_updates++;
+		}
+		
 		pwm_count++;
 
 		if (pwm_count > PWM_FREQ)
 		{
+			should_updates = 0;
 			/*if ((seconds % 300) == 0)
 			{
 				execute_order_66 = true;
@@ -97,7 +103,7 @@ void things_to_do(void)
 		sprintf(buffer,"%04d %04d %04d %04d %04d %04d\r\n",values_bands[0],values_bands[1],values_bands[2],values_bands[3],values_bands[4],values_bands[5]);
 		uart_write(&buffer);
 	}
-	if ((pwm_count % 25) == 0)
+	if ((should_updates % 25) == 0)
 	{
 		if (flashy1)
 		{

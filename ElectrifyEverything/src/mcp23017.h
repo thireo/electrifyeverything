@@ -66,4 +66,6 @@ void mcp23017_reset(void);
 
 void mcp23017_pin_init(void);
 
+void mcp23017_bus_reset();
+
 #endif /* MCP23017_H_ */
