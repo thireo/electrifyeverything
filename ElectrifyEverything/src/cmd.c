@@ -159,12 +159,24 @@ struct mcp23017_object mcp23017_data={				\
 	.devices[7].status = STATUS_OK};
 
 
-
-
+char bufbuf[1024];
+int buf_count = 0; 
 
 void data_handler(char buffer[])
 {
 	int buf_s = strlen(buffer);
+	if (strncmp(buffer,"\r\n\rAdafruit",7) == 0)
+	{
+		ble_uart_write("#01\n");
+	}
+	if (strncmp(buffer,"T00",3) == 0)
+	{
+		ble_uart_write("L\n");
+		int arg0;
+		//ble_uart_write("L\n");
+		sscanf(buffer,"T0%d",&arg0);
+	}
+	
 	if (strncmp(buffer,test_bob,3) == 0)
 	{
 		ble_uart_write("bob was found");

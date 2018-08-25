@@ -39,6 +39,8 @@
 #include "sounds.h"
 #include "msgeq7.h"
 #include "uart.h"
+#include "string.h"
+
 
 //#include "ds18b20.h"
 
@@ -55,8 +57,18 @@ int main (void)
 	
 	system_init();
 	delay_init();
-	ble_uart_init();
-	uart_init();
+	//ble_uart_init();
+	//uart_init();
+	sb_uart_init();
+	
+	
+	sounds_init_pins();
+	sounds_reset();
+	delay_ms(500);
+	//sprintf(buffer,"#02\n");
+	//uart_write(buffer);
+	
+	/*
 	sprintf(buffer,"\n<-------------------->\n");
 	ble_uart_write(buffer);
 	uart_write(buffer);
@@ -101,12 +113,15 @@ int main (void)
 	party_thresholds[5] = 2000;
 	party_thresholds[6] = 2375;
 	 
+	*/
+	
+	int sound_no = 0;
 	
 	while (1)
 	{
-		for (uint8_t i=0;i<sizeof(rx_buffer_array);i++)
+		for (uint32_t i=0;i<sizeof(rx_buffer_array)-1;i++)
 		{
-			if (rx_buffer_array[i] == '\n')
+			if (rx_buffer_array[i] == '\n' & rx_buffer_array[i+1] == 0)//'\n')
 			{
 				data_handler(rx_buffer_array);
 				reset_buffers();
@@ -116,7 +131,23 @@ int main (void)
 				break;
 			}
 		}
-		
+		if (strstr(sb_rx_buffer_array,"Adafruit") != NULL)
+		//if (strncmp(sb_rx_buffer_array,"\r\n\rAdafruit",7) == 0)
+		{
+			sb_reset_buffers();
+			uart_write("#00\n");
+		}
+		if (strstr(sb_rx_buffer_array,"done") != NULL)
+		//if (strncmp(sb_rx_buffer_array,"\r\n\rAdafruit",7) == 0)
+		{
+			if (sound_no > 10)
+			{
+				sound_no = 0;
+			}
+			sprintf(buffer,"#%d\n",sound_no++);
+			sb_reset_buffers();
+			uart_write(buffer);
+		}
 		if (should_update)
 		{
 			should_update = false;

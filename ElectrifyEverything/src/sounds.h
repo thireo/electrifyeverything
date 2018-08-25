@@ -38,7 +38,7 @@
 #define MTH_EN 7
 
 #define SB_PIN_UG PIN_PA27
-#define SB_PIN_RESET PIN_PA28
+#define SB_PIN_RESET PIN_PA07//PIN_PA28
 
 
 #define SAMPLE_RATE_x16 0

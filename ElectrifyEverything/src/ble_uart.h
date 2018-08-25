@@ -40,13 +40,13 @@
 #define SAMPLE_RATE_x16 0
 
 
-volatile char rx_buffer_array[128];
+volatile char rx_buffer_array[1024];
 volatile static int buff_count;
 void reset_buffers(void);
 
 
-void uart_clk_init(void);
-void uart_pin_init(void);
+void ble_uart_clk_init(void);
+void ble_uart_pin_init(void);
 void ble_uart_init(void);
 void ble_uart_write(char buffer[]);
 void Uart_write(const uint16_t data);

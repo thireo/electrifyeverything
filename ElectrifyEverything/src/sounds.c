@@ -22,7 +22,7 @@ void sounds_init_pins(void)
 	
 	
 	
-	port_pin_set_config(SB_PIN_BTN00,&config_port_pin);
+	/*port_pin_set_config(SB_PIN_BTN00,&config_port_pin);
 	port_pin_set_output_level(SB_PIN_BTN00,true);
 	
 	port_pin_set_config(SB_PIN_BTN01,&config_port_pin);
@@ -53,11 +53,11 @@ void sounds_init_pins(void)
 	port_pin_set_output_level(SB_PIN_BTN09,true);
 	
 	port_pin_set_config(SB_PIN_BTN10,&config_port_pin);
-	port_pin_set_output_level(SB_PIN_BTN10,true);
+	port_pin_set_output_level(SB_PIN_BTN10,true);*/
 	
-	config_port_pin.direction = PORT_PIN_PULL_UP;
+	config_port_pin.direction = PORT_PIN_PULL_DOWN;
 	port_pin_set_config(SB_PIN_UG,&config_port_pin);
-	port_pin_set_output_level(SB_PIN_UG,true);
+	port_pin_set_output_level(SB_PIN_UG,false);
 }
 
 
@@ -130,6 +130,7 @@ void sounds_reset(void)
 	port_pin_set_output_level(SB_PIN_RESET,false);
 	delay_ms(50);
 	port_pin_set_output_level(SB_PIN_RESET,true);
+	delay_ms(1000);
 	release_sb_btn(SB_PIN_BTN00);
 	release_sb_btn(SB_PIN_BTN01);
 	release_sb_btn(SB_PIN_BTN02);

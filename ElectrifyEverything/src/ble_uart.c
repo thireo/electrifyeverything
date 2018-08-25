@@ -24,7 +24,7 @@ typedef enum
 } SercomRXPad;
 
 
-void uart_clk_init(void)
+void ble_uart_clk_init(void)
 {
 	// Start the Software Reset and wait for it to finish
 	BLE_UART_SERCOM->USART.CTRLA.bit.SWRST = 1 ;
@@ -42,7 +42,7 @@ void uart_clk_init(void)
 	while ( GCLK->STATUS.reg & GCLK_STATUS_SYNCBUSY ); // Wait for synchronization
 }
 
-void uart_pin_init(void)
+void ble_uart_pin_init(void)
 {
 	PORT->Group[PORTGROUP_A].DIRCLR.reg = PORT_PA08;	// RX as input
 	
@@ -62,8 +62,8 @@ void uart_pin_init(void)
 
 void ble_uart_init(void)
 {	
-	uart_clk_init();
-	uart_pin_init();
+	ble_uart_clk_init();
+	ble_uart_pin_init();
 	
 	
 	
@@ -134,7 +134,7 @@ void SERCOM2_Handler()
 		//while (BLE_UART_SERCOM->USART.INTFLAG.bit.DRE != 0 )
 		//{
 			// Got a character
-			if (buff_count > 127)
+			if (buff_count > sizeof(rx_buffer_array)-1)
 			{
 				buff_count = 0;
 				rx_buffer_array[buff_count] = (uint8_t) BLE_UART_SERCOM->USART.DATA.reg;
@@ -150,7 +150,7 @@ void SERCOM2_Handler()
 
 void reset_buffers()
 {
-	for (uint8_t k=0;k<sizeof(rx_buffer_array);k++)
+	for (uint32_t k=0;k<sizeof(rx_buffer_array);k++)
 	{
 		rx_buffer_array[k] = 0;
 	}
