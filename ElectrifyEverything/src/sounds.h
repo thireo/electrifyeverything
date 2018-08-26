@@ -77,4 +77,8 @@ void sounds_uart_init(void);
 void sounds_uart_write(char buffer[]);
 void sounds_reset_buffers(void);
 
+void sb_event_handler(char buffer[]);
+void sb_play_track_by_number(int track);
+void sb_quit(void);
+
 #endif /* SOUNDS_H_ */

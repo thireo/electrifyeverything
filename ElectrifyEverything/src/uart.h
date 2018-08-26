@@ -37,8 +37,9 @@ void uart_cb_init(void);
 void uart_rx_cb(struct usart_module *const ble_uart_module);
 void uart_tx_cb(struct usart_module *const ble_uart_module);
 void uart_read(void);
-void uart_write(char buffer[]);
 
+
+void sb_uart_write(char buffer[]);
 void sb_uart_clk_init(void);
 void sb_uart_pin_init(void);
 void sb_uart_init(void);

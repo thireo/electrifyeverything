@@ -1107,11 +1107,11 @@ bool a_okay()
 		mcp23017_data.devices[i].status = states[i];
 		sprintf(buffer,"ADDR: %d -> %d\n",i,mcp23017_data.devices[i].status);
 		ble_uart_write(buffer);
-		uart_write(buffer);
+		sb_uart_write(buffer);
 	}
 	sprintf(buffer,"ERR: %d%d%d%d%d%d%d%d\r\n",mcp23017_data.devices[7].error_detected,mcp23017_data.devices[6].error_detected,mcp23017_data.devices[5].error_detected,mcp23017_data.devices[4].error_detected,mcp23017_data.devices[3].error_detected,mcp23017_data.devices[2].error_detected,mcp23017_data.devices[1].error_detected,mcp23017_data.devices[0].error_detected);
 	ble_uart_write(buffer);
-	uart_write(buffer);
+	sb_uart_write(buffer);
 	
 	return return_val;
 }

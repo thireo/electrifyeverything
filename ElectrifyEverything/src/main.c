@@ -59,6 +59,7 @@ int main (void)
 	delay_init();
 	//ble_uart_init();
 	//uart_init();
+	sb_reset_buffers();
 	sb_uart_init();
 	
 	
@@ -131,23 +132,23 @@ int main (void)
 				break;
 			}
 		}
-		if (strstr(sb_rx_buffer_array,"Adafruit") != NULL)
-		//if (strncmp(sb_rx_buffer_array,"\r\n\rAdafruit",7) == 0)
-		{
-			sb_reset_buffers();
-			uart_write("#00\n");
-		}
-		if (strstr(sb_rx_buffer_array,"done") != NULL)
+		sb_event_handler(sb_rx_buffer_array);
+		/*if (strstr(sb_rx_buffer_array,"done") != NULL)
 		//if (strncmp(sb_rx_buffer_array,"\r\n\rAdafruit",7) == 0)
 		{
 			if (sound_no > 10)
 			{
 				sound_no = 0;
 			}
-			sprintf(buffer,"#%d\n",sound_no++);
 			sb_reset_buffers();
-			uart_write(buffer);
-		}
+			sb_play_track_by_number(sound_no++);
+			if (sound_no == 3)
+			{
+				delay_ms(250);
+				sb_play_track_by_number(2);
+			}
+			//sb_uart_write(buffer);
+		}*/
 		if (should_update)
 		{
 			should_update = false;
