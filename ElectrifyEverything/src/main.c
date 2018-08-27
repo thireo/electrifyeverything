@@ -60,12 +60,16 @@ int main (void)
 	//ble_uart_init();
 	//uart_init();
 	sb_reset_buffers();
-	sb_uart_init();
+	
 	
 	
 	sounds_init_pins();
+	sb_uart_init();
+	delay_ms(1500);
 	sounds_reset();
-	delay_ms(500);
+	//sb_play_track_by_number(0);
+	
+	
 	//sprintf(buffer,"#02\n");
 	//uart_write(buffer);
 	
@@ -132,6 +136,7 @@ int main (void)
 				break;
 			}
 		}
+		
 		sb_event_handler(sb_rx_buffer_array);
 		/*if (strstr(sb_rx_buffer_array,"done") != NULL)
 		//if (strncmp(sb_rx_buffer_array,"\r\n\rAdafruit",7) == 0)

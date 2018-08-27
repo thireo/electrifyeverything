@@ -31,6 +31,7 @@
 
 volatile char sb_rx_buffer_array[1024];
 volatile static int sb_buff_count;
+volatile int line_count;
 
 void uart_init(void);
 void uart_cb_init(void);

@@ -56,6 +56,7 @@ void sb_uart_init(void)
 	sb_uart_pin_init();
 	
 	sb_buff_count = 0;
+	line_count = 0;
 	
 	CONF_STDIO_USART_MODULE->USART.CTRLA.reg =
 	SERCOM_USART_CTRLA_DORD						|	// LSB_FIRST
@@ -99,21 +100,24 @@ void SERCOM1_Handler()
 {
 	if (CONF_STDIO_USART_MODULE->USART.INTFLAG.bit.RXC)
 	{
-		char temp = (uint8_t) CONF_STDIO_USART_MODULE->USART.DATA.reg;
-		if (temp != '\0')
+		// Got a character
+		if (sb_buff_count > sizeof(sb_rx_buffer_array)-1)
 		{
-			// Got a character
-			if (sb_buff_count > sizeof(sb_rx_buffer_array)-1)
+			sb_buff_count = 0;
+			sb_rx_buffer_array[sb_buff_count] = (uint8_t) CONF_STDIO_USART_MODULE->USART.DATA.reg;
+			if (sb_rx_buffer_array[sb_buff_count] == 13)
 			{
-				sb_buff_count = 0;
-				sb_rx_buffer_array[sb_buff_count] = (uint8_t) CONF_STDIO_USART_MODULE->USART.DATA.reg;
-			}
-			else
-			{
-				sb_rx_buffer_array[sb_buff_count++] = (uint8_t)CONF_STDIO_USART_MODULE->USART.DATA.reg;
+				line_count++;
 			}
 		}
-
+		else
+		{
+			sb_rx_buffer_array[sb_buff_count++] = (uint8_t)CONF_STDIO_USART_MODULE->USART.DATA.reg;
+			if (sb_rx_buffer_array[sb_buff_count-1] == 13)
+			{
+				line_count++;
+			}
+		}
 	}
 }
 
