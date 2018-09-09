@@ -330,9 +330,23 @@ void data_handler(char buffer[])
 	{
 		horn3 = false;
 	}
-	else if(strncmp(buffer,SOUND_0_ON,6) == 0)
+	else if(strstr(buffer,"SB") != NULL && strlen(buffer) >= 6)
 	{
-		press_sb_btn_once(SB_PIN_BTN00);
+		if (buffer[5] == '1')
+		{
+			int track;
+			sscanf(buffer,"SB%d\n",&track);
+			sb_play_track_by_number(track);			
+		}
+		else
+		{
+			sb_quit();
+		}
+	}
+	/*else if(strncmp(buffer,SOUND_0_ON,6) == 0)
+	{
+		sb_play_track_by_number(0);
+		//press_sb_btn_once(SB_PIN_BTN00);
 	}
 	else if(strncmp(buffer,SOUND_0_OFF,6) == 0)
 	{
@@ -417,7 +431,7 @@ void data_handler(char buffer[])
 	else if(strncmp(buffer,SOUND_10_OFF,6) == 0)
 	{
 		release_sb_btn(SB_PIN_BTN10);
-	}
+	}*/
 	else if (strncmp(buffer,SOUND_RESET,sizeof(SOUND_RESET)-1) == 0)
 	{
 		ble_uart_write("SB: RESETTING");

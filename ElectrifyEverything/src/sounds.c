@@ -24,7 +24,7 @@ struct adafruit_soundboards
 	int number_of_tracks;
 	int partition_size; //in 512 byte chunks.
 	int currently_playing;
-	struct soundboard_tracks tracks[19];
+	struct soundboard_tracks tracks[25];
 };
 
 struct adafruit_soundboards soundboard_instance ={		\
@@ -125,6 +125,36 @@ struct adafruit_soundboards soundboard_instance ={		\
 	.tracks[18].is_playing = false,						\
 	.tracks[18].track_number = 18,						\
 	.tracks[18].filesize = 0,							\
+	.tracks[19].filename = "UNDEFINED FILE",			\
+	.tracks[19].filetype = "N/A",						\
+	.tracks[19].is_playing = false,						\
+	.tracks[19].track_number = 19,						\
+	.tracks[19].filesize = 0,							\
+	.tracks[20].filename = "UNDEFINED FILE",			\
+	.tracks[20].filetype = "N/A",						\
+	.tracks[20].is_playing = false,						\
+	.tracks[20].track_number = 20,						\
+	.tracks[20].filesize = 0,							\
+	.tracks[21].filename = "UNDEFINED FILE",			\
+	.tracks[21].filetype = "N/A",						\
+	.tracks[21].is_playing = false,						\
+	.tracks[21].track_number = 21,						\
+	.tracks[21].filesize = 0,							\
+	.tracks[22].filename = "UNDEFINED FILE",			\
+	.tracks[22].filetype = "N/A",						\
+	.tracks[22].is_playing = false,						\
+	.tracks[22].track_number = 22,						\
+	.tracks[22].filesize = 0,							\
+	.tracks[23].filename = "UNDEFINED FILE",			\
+	.tracks[23].filetype = "N/A",						\
+	.tracks[23].is_playing = false,						\
+	.tracks[23].track_number = 23,						\
+	.tracks[23].filesize = 0,							\
+	.tracks[24].filename = "UNDEFINED FILE",			\
+	.tracks[24].filetype = "N/A",						\
+	.tracks[24].is_playing = false,						\
+	.tracks[24].track_number = 24,						\
+	.tracks[24].filesize = 0,							\
 };
 
 void sounds_init_pins(void)
@@ -359,5 +389,8 @@ void sb_quit(void)
 	sb_uart_write("q\n");
 }
 
-
+bool is_started(void)
+{
+	return soundboard_instance.started;
+}
 	

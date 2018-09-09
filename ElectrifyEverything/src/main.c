@@ -57,7 +57,7 @@ int main (void)
 	
 	system_init();
 	delay_init();
-	//ble_uart_init();
+	ble_uart_init();
 	//uart_init();
 	sb_reset_buffers();
 	
@@ -124,6 +124,15 @@ int main (void)
 	
 	while (1)
 	{
+		
+		if (is_started())
+		{
+			/*sb_play_track_by_number(3);
+			delay_ms(1000);
+			sb_play_track_by_number(4);*/
+		}
+		
+		
 		for (uint32_t i=0;i<sizeof(rx_buffer_array)-1;i++)
 		{
 			if (rx_buffer_array[i] == '\n' & rx_buffer_array[i+1] == 0)//'\n')
