@@ -66,7 +66,11 @@ int main (void)
 	sounds_init_pins();
 	sb_uart_init();
 	delay_ms(1500);
-	sounds_reset();
+	//sounds_reset();
+
+	
+	
+	
 	//sb_play_track_by_number(0);
 	
 	
