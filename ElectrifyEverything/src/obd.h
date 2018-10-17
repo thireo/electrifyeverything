@@ -9,6 +9,9 @@
 #ifndef OBD_H_
 #define OBD_H_
 
+#include "asf.h"
+#include "status_codes.h"
+
 #define INIT_CMD1 "ATZ\r"	//RESET 
 #define INIT_CMD2 "ATE0\r"	//ECHO OFF
 #define INIT_CMD3 "ATH0\r"	//HEADERS OFF
@@ -101,11 +104,10 @@ uint8_t pidmap[4 * 4];
 
 
 
-void obd_uart_write(char buffer[]);
+enum status_code obd_uart_write(uint8_t *data);
 uint16_t hex2uint16(const char *p);
 uint8_t hex2uint8(const char *p);
 void obd_init(void);
-void obd_send_query(uint8_t pid);
-
+enum status_code obd_send_query(uint8_t service, uint8_t pid, uint8_t data_length);
 
 #endif /* OBD_H_ */

@@ -6,14 +6,11 @@
  */ 
 #include "asf.h"
 #include "obd.h"
-#include "uart.h"
+#include "obd_uart.h"
 #include "string.h"
 
 
-void obd_uart_write(char buffer[])
-{
-	sb_uart_write(buffer);
-}
+
 
 
 uint16_t hex2uint16(const char *p)
@@ -60,19 +57,21 @@ uint8_t hex2uint8(const char *p)
 
 void obd_init(void)
 {
-	dataMode = 1;
+	
+	obd_uart_init();
+	//dataMode = 1;
 
-	sb_uart_write("ATZ\r");
+	/*obd_uart_write("ATZ\r");
 	delay_ms(10);
-	sb_uart_write("ATE0\r");
+	obd_uart_write("ATE0\r");
 	delay_ms(10);
-	sb_uart_write("ATH0\r");
+	obd_uart_write("ATH0\r");
 	//delay_ms(10);
 	//sb_uart_write("ATSP%u\r");
 	delay_ms(10);
-	sb_uart_write("010D\r");
+	obd_uart_write("010D\r");
 	
-	sb_uart_write("ATRV\r");
+	obd_uart_write("ATRV\r");*/
 
 
 	obd_uart_write(INIT_CMD1);	//RESET
@@ -90,15 +89,19 @@ void obd_init(void)
 	for (uint8_t i = 0;i < 4; i++)
 	{
 		uint8_t pid = i * 0x20;
-		obd_send_query(pid);
+		obd_send_query(0x01,pid,4);
 	}
 }
 
-void obd_send_query(uint8_t pid)
+enum status_code obd_send_query(uint8_t service, uint8_t pid, uint8_t data_length)
 {
+	enum status_code temp = STATUS_OK;
+	uint8_t i = 0;
+	uint8_t data[data_length];
 	char cmd[8];
-	sprintf(cmd,"%02X%02X\r",dataMode,pid);
-	obd_uart_write(cmd);
+	sprintf(cmd,"%02X%02X\r",service,pid);
+	temp = obd_uart_write(cmd);
+	temp = obd_uart_read(&data,data_length);
+	return temp;
 }
 
-bool obd_send_c

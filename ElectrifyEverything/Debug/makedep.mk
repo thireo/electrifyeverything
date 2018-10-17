@@ -2,6 +2,10 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\obd.c
+
+src\obd_uart.c
+
 src\wdt.c
 
 src\ads1115.c

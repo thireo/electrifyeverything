@@ -40,6 +40,7 @@
 #include "msgeq7.h"
 #include "uart.h"
 #include "string.h"
+#include "obd.h"
 
 
 //#include "ds18b20.h"
@@ -57,17 +58,18 @@ int main (void)
 	
 	system_init();
 	delay_init();
-	ble_uart_init();
+	//ble_uart_init();
 	//uart_init();
-	sb_reset_buffers();
+	//sb_reset_buffers();
 	
 	
 	
-	sounds_init_pins();
-	sb_uart_init();
+	//sounds_init_pins();
+	//sb_uart_init();
 	delay_ms(1500);
 	//sounds_reset();
 
+	obd_init();
 	
 	
 	

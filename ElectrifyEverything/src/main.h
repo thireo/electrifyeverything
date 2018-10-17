@@ -9,6 +9,7 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
+#define SYSTEM_CLK 8000000
 
 #define SOFTWARE_VERSION 42
 
