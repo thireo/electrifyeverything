@@ -17,6 +17,7 @@
 #define INIT_CMD3 "ATH0\r"	//HEADERS OFF
 
 // Mode 1 PIDs
+#define PID_MONITOR_STATUS 0x01
 #define PID_ENGINE_LOAD 0x04
 #define PID_COOLANT_TEMP 0x05
 #define PID_SHORT_TERM_FUEL_TRIM_1 0x06
@@ -104,10 +105,18 @@ uint8_t pidmap[4 * 4];
 
 
 
-enum status_code obd_uart_write(uint8_t *data);
 uint16_t hex2uint16(const char *p);
 uint8_t hex2uint8(const char *p);
 void obd_init(void);
-enum status_code obd_send_query(uint8_t service, uint8_t pid, uint8_t data_length);
+enum status_code obd_send_query_pid(uint8_t service, uint8_t pid, uint8_t data_length, uint8_t *read_read);
+enum status_code obd_send_query_string(uint8_t *string, uint8_t data_length, uint8_t *read_read);
+
+uint8_t get_engine_load(void);
+int get_coolant_temp(void);
+uint8_t get_intake_manifold_pressure(void);
+int get_intake_air_temp(void);
+uint16_t get_engine_rpm(void);
+uint8_t get_vehicle_speed(void);
+float get_battery_voltage(void);
 
 #endif /* OBD_H_ */

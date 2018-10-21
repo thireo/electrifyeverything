@@ -89,19 +89,90 @@ void obd_init(void)
 	for (uint8_t i = 0;i < 4; i++)
 	{
 		uint8_t pid = i * 0x20;
-		obd_send_query(0x01,pid,4);
+		obd_send_query_pid(0x01,pid,4,pidmap[i]);
 	}
 }
 
-enum status_code obd_send_query(uint8_t service, uint8_t pid, uint8_t data_length)
+enum status_code obd_send_query_pid(uint8_t service, uint8_t pid, uint8_t data_length, uint8_t *read_read)
 {
 	enum status_code temp = STATUS_OK;
-	uint8_t i = 0;
-	uint8_t data[data_length];
 	char cmd[8];
 	sprintf(cmd,"%02X%02X\r",service,pid);
 	temp = obd_uart_write(cmd);
-	temp = obd_uart_read(&data,data_length);
+	temp = obd_uart_read(read_read,data_length);
 	return temp;
 }
 
+enum status_code obd_send_query_string(uint8_t *string, uint8_t data_length, uint8_t *read_read)
+{
+	enum status_code temp = STATUS_OK;
+	temp = obd_uart_write(string);
+	temp = obd_uart_read(read_read,data_length);
+	return temp;
+}
+
+
+//ENGINE LOAD [0 - 100] %
+uint8_t get_engine_load(void)
+{
+	uint8_t A;
+	obd_send_query_pid(0x01,PID_ENGINE_LOAD,1,&A);
+	return (uint8_t) (100/255)*A;
+}
+
+//ENGINE COOLANT TEMPERATURE [-40 - 215] Celsius 
+int get_coolant_temp(void)
+{
+	int A;
+	obd_send_query_pid(0x01,PID_COOLANT_TEMP,1,&A);
+	return (int) A-40;
+}
+
+//INTAKE MANIFOLD ABS PRESSURE [0 255] kPa
+uint8_t get_intake_manifold_pressure(void)
+{
+	uint8_t A;
+	obd_send_query_pid(0x01,PID_INTAKE_MAP,1,&A);
+	return (uint8_t) A;
+}
+
+//INTAKE AIR TEMPERATURE [-40 215] Celsius
+int get_intake_air_temp(void)
+{
+	uint8_t A;
+	obd_send_query_pid(0x01,PID_INTAKE_MAP,1,&A);
+	return (int) A-40;
+}
+
+//ENGINE RPM [0 16,383.75] rpm
+uint16_t get_engine_rpm(void)
+{
+	uint8_t data[2];
+	obd_send_query_pid(0x01,PID_RPM,2,data);
+	return (uint16_t) (256*data[0]+data[1])/4;
+}
+
+//VEHICLE SPEED [0 255] km/h
+uint8_t get_vehicle_speed(void)
+{
+	uint8_t A;
+	obd_send_query_pid(0x01,PID_SPEED,1,&A);
+	return A;
+}
+
+//Returns number of DTCs
+uint8_t get_monitor_status(void)
+{
+	uint8_t data[4];
+	obd_send_query_pid(0x01,PID_MONITOR_STATUS,4,data);
+	return (uint8_t) (data[0] & 0x7F);
+}
+
+float get_battery_voltage(void)
+{
+	uint8_t data[6];
+	obd_send_query_string("ATRV",6,data);
+	float f = 0.0;
+	sscanf(data,"%f",&f);
+	return f;
+}

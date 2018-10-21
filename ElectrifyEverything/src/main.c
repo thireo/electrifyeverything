@@ -58,7 +58,7 @@ int main (void)
 	
 	system_init();
 	delay_init();
-	//ble_uart_init();
+	ble_uart_init();
 	//uart_init();
 	//sb_reset_buffers();
 	
@@ -126,10 +126,20 @@ int main (void)
 	 
 	*/
 	
-	int sound_no = 0;
+	//int sound_no = 0;
 	
 	while (1)
 	{
+		
+		if (obd_should_update)
+		{
+			char buffer[32];
+			sprintf(buffer,"Battery: %dV\r\n",(int)get_battery_voltage());
+			ble_uart_write(buffer);
+			sprintf(buffer,"RPM: %d\r\n",get_engine_rpm());
+			ble_uart_write(buffer);
+			obd_should_update = false;
+		}
 		
 		if (is_started())
 		{

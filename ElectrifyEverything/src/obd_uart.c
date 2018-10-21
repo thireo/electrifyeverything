@@ -15,12 +15,12 @@ void obd_uart_clk_init(void)
 	while ( OBD_UART_MODULE->USART.CTRLA.bit.SWRST || OBD_UART_MODULE->USART.SYNCBUSY.bit.SWRST );
 	
 	// Turn on peripheral clock for SERCOM being used
-	PM->APBCMASK.reg |= PM_APBCMASK_SERCOM1;
+	PM->APBCMASK.reg |= PM_APBCMASK_SERCOM0;
 
 	//Setting clock
 	GCLK->CLKCTRL.reg =
-	GCLK_CLKCTRL_ID( 0x15U )	|	// connected  SERCOMx to
-	GCLK_CLKCTRL_GEN_GCLK0		|	// generic Clock Generator 3
+	GCLK_CLKCTRL_ID( 0x14U )	|	// connected  SERCOMx to
+	GCLK_CLKCTRL_GEN_GCLK0		|	// generic Clock Generator 0
 	GCLK_CLKCTRL_CLKEN;			// and enable it
 
 	while ( GCLK->STATUS.reg & GCLK_STATUS_SYNCBUSY ); // Wait for synchronization
@@ -28,19 +28,19 @@ void obd_uart_clk_init(void)
 
 void obd_uart_pin_init(void)
 {
-	PORT->Group[PORTGROUP_A].DIRCLR.reg = PORT_PA16;	// RX as input
+	PORT->Group[PORTGROUP_A].DIRCLR.reg = PORT_PA05;	// RX as input
 	
-	PORT->Group[PORTGROUP_A].DIRSET.reg = PORT_PA18;	// TX as output
-	PORT->Group[PORTGROUP_A].OUTSET.reg = PORT_PA18;	// TX idle state is high
+	PORT->Group[PORTGROUP_A].DIRSET.reg = PORT_PA04;	// TX as output
+	PORT->Group[PORTGROUP_A].OUTSET.reg = PORT_PA04;	// TX idle state is high
 
 	// set port multiplexer for peripheral TX
 	// =======================================
-	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_TX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_C_Val );
-	PORT->Group[PORTGROUP_A].PMUX[OBD_TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_C_Val );
+	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_TX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_D_Val );
+	PORT->Group[PORTGROUP_A].PMUX[OBD_TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_D_Val );
 	
 	PORT->Group[PORTGROUP_A].PINCFG[OBD_TX_PIN].reg = PORT_PINCFG_PMUXEN ; // Enable port mux
-	temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_RX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_C_Val );
-	PORT->Group[PORTGROUP_A].PMUX[OBD_RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_C_Val );
+	temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_RX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_D_Val );
+	PORT->Group[PORTGROUP_A].PMUX[OBD_RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_D_Val );
 	PORT->Group[PORTGROUP_A].PINCFG[OBD_RX_PIN].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_INEN; // Enable port mux
 }
 
@@ -55,7 +55,7 @@ void obd_uart_init(void)
 	OBD_UART_MODULE->USART.CTRLA.reg =
 	SERCOM_USART_CTRLA_DORD						|	// Lobd_FIRST
 	SERCOM_USART_CTRLA_TXPO(0)					|	// TX on Pad2
-	SERCOM_USART_CTRLA_RXPO(2)					|	// RX on Pad0
+	SERCOM_USART_CTRLA_RXPO(1)					|	// RX on Pad0
 	SERCOM_USART_CTRLA_SAMPR(0)					|	// 16 times oversampling
 	SERCOM_USART_CTRLA_RUNSTDBY					|	// Run in standby mode
 	SERCOM_USART_CTRLA_MODE_USART_INT_CLK;			// Use internal clock
@@ -78,8 +78,8 @@ void obd_uart_init(void)
 	OBD_UART_MODULE->USART.INTENSET.reg = SERCOM_USART_INTENSET_RXC;	// Interrupt on received complete
 	
 	// Enable interrupts
-	NVIC_EnableIRQ(SERCOM1_IRQn);
-	NVIC_SetPriority(SERCOM1_IRQn,1);
+	NVIC_EnableIRQ(SERCOM0_IRQn);
+	NVIC_SetPriority(SERCOM0_IRQn,1);
 	
 	// enable the peripheral block
 	OBD_UART_MODULE->USART.CTRLA.bit.ENABLE = 0x1u;

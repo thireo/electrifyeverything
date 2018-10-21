@@ -23,6 +23,7 @@ int seconds;
 bool should_update;
 bool execute_order_66;
 bool should_check;
+bool obd_should_update;
 int should_updates;
 
 struct tc_module tc_instance;

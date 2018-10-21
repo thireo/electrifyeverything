@@ -64,6 +64,11 @@ void TC3_Handler()
 			should_updates++;
 		}
 		
+		if((pwm_count % 25) == 0)
+		{
+			obd_should_update = true;
+		}
+		
 		pwm_count++;
 
 		if (pwm_count > PWM_FREQ)
