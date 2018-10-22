@@ -71,7 +71,7 @@ int main (void)
 
 	obd_init();
 	
-	
+	init_TC3();
 	
 	//sb_play_track_by_number(0);
 	

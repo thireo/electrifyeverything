@@ -89,7 +89,7 @@ void obd_init(void)
 	for (uint8_t i = 0;i < 4; i++)
 	{
 		uint8_t pid = i * 0x20;
-		obd_send_query_pid(0x01,pid,4,pidmap[i]);
+		obd_send_query_pid(0x01,pid,4,&pidmap[i]);
 	}
 }
 

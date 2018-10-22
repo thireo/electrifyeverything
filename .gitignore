@@ -1,3 +1,5 @@
 *.o
 *.d
 .vscode/c_cpp_properties.json
+
+ElectrifyEverything/Debug/
