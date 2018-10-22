@@ -5,6 +5,8 @@
  *  Author: Andreas
  */ 
 
+#ifndef AUDIA6_H_
+#define AUDIA6_H_
 
 volatile bool flash_all;
 volatile bool blink_all;
@@ -45,3 +47,5 @@ volatile uint8_t party_band_chosen;
 
 volatile bool valve_open;
 volatile bool valve_close;
+
+#endif /* AUDIA6_H_ */

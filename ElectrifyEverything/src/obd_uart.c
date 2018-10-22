@@ -35,22 +35,19 @@ void obd_uart_pin_init(void)
 
 	// set port multiplexer for peripheral TX
 	// =======================================
-	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_TX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_D_Val );
-	PORT->Group[PORTGROUP_A].PMUX[OBD_TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_D_Val );
+	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_UART_TX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_D_Val );
+	PORT->Group[PORTGROUP_A].PMUX[OBD_UART_TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_D_Val );
 	
-	PORT->Group[PORTGROUP_A].PINCFG[OBD_TX_PIN].reg = PORT_PINCFG_PMUXEN ; // Enable port mux
-	temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_RX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_D_Val );
-	PORT->Group[PORTGROUP_A].PMUX[OBD_RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_D_Val );
-	PORT->Group[PORTGROUP_A].PINCFG[OBD_RX_PIN].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_INEN; // Enable port mux
+	PORT->Group[PORTGROUP_A].PINCFG[OBD_UART_TX_PIN].reg = PORT_PINCFG_PMUXEN ; // Enable port mux
+	temp = (PORT->Group[PORTGROUP_A].PMUX[OBD_UART_RX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_D_Val );
+	PORT->Group[PORTGROUP_A].PMUX[OBD_UART_RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_D_Val );
+	PORT->Group[PORTGROUP_A].PINCFG[OBD_UART_RX_PIN].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_INEN; // Enable port mux
 }
 
 void obd_uart_init(void)
 {
 	obd_uart_clk_init();
 	obd_uart_pin_init();
-	
-	obd_buff_count = 0;
-	line_count = 0;
 	
 	OBD_UART_MODULE->USART.CTRLA.reg =
 	SERCOM_USART_CTRLA_DORD						|	// Lobd_FIRST
@@ -63,7 +60,7 @@ void obd_uart_init(void)
 	// Asynchronous arithmetic mode
 	// 65535 * ( 1 - sampleRateValue * baudrate / SystemCoreClock);
 	// 65535 - 65535 * (sampleRateValue * baudrate / SystemCoreClock));
-	OBD_UART_MODULE->USART.BAUD.reg = 65535.0f * ( 1.0f - (16.0 * (float)(OBD_BAUDRATE)) / (float)(SYSTEM_CLK));
+	OBD_UART_MODULE->USART.BAUD.reg = 65535.0f * ( 1.0f - (16.0 * (float)(OBD_UART_BAUDRATE)) / (float)(SYSTEM_CLK));
 	//BLE_UART_SERCOM->USART.BAUD.bit.BAUD = 9600;
 	
 	OBD_UART_MODULE->USART.CTRLB.reg =

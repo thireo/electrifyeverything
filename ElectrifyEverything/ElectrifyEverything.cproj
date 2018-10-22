@@ -900,10 +900,10 @@
     <Compile Include="src\sounds.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\uart.c">
+    <Compile Include="src\sb_uart.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\uart.h">
+    <Compile Include="src\sb_uart.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\sam0\drivers\tc\tc.h">

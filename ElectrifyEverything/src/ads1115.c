@@ -6,7 +6,7 @@
  */ 
 #include "ads1115.h"
 
-static uint8_t current_channel;
+//static uint8_t current_channel;
 /*
 void configure_i2c_master(void)
 {

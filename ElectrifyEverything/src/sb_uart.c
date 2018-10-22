@@ -6,7 +6,7 @@
  */ 
 
 #include "asf.h"
-#include "uart.h"
+#include "sb_uart.h"
 #include "string.h"
 
 /**
@@ -17,8 +17,8 @@
 void sb_uart_clk_init(void)
 {
 	// Start the Software Reset and wait for it to finish
-	CONF_STDIO_USART_MODULE->USART.CTRLA.bit.SWRST = 1 ;
-	while ( CONF_STDIO_USART_MODULE->USART.CTRLA.bit.SWRST || CONF_STDIO_USART_MODULE->USART.SYNCBUSY.bit.SWRST );
+	SB_UART_MODULE->USART.CTRLA.bit.SWRST = 1 ;
+	while ( SB_UART_MODULE->USART.CTRLA.bit.SWRST || SB_UART_MODULE->USART.SYNCBUSY.bit.SWRST );
 	
 	// Turn on peripheral clock for SERCOM being used
 	PM->APBCMASK.reg |= PM_APBCMASK_SERCOM1;
@@ -41,13 +41,13 @@ void sb_uart_pin_init(void)
 
 	// set port multiplexer for peripheral TX
 	// =======================================
-	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[TX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_C_Val );
-	PORT->Group[PORTGROUP_A].PMUX[TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_C_Val );
+	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[SB_UART_TX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_C_Val );
+	PORT->Group[PORTGROUP_A].PMUX[SB_UART_TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_C_Val );
 	
-	PORT->Group[PORTGROUP_A].PINCFG[TX_PIN].reg = PORT_PINCFG_PMUXEN ; // Enable port mux
-	temp = (PORT->Group[PORTGROUP_A].PMUX[RX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_C_Val );
-	PORT->Group[PORTGROUP_A].PMUX[RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_C_Val );
-	PORT->Group[PORTGROUP_A].PINCFG[RX_PIN].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_INEN; // Enable port mux
+	PORT->Group[PORTGROUP_A].PINCFG[SB_UART_TX_PIN].reg = PORT_PINCFG_PMUXEN ; // Enable port mux
+	temp = (PORT->Group[PORTGROUP_A].PMUX[SB_UART_RX_PIN>>1].reg) & PORT_PMUX_PMUXO( PORT_PMUX_PMUXO_C_Val );
+	PORT->Group[PORTGROUP_A].PMUX[SB_UART_RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( PORT_PMUX_PMUXE_C_Val );
+	PORT->Group[PORTGROUP_A].PINCFG[SB_UART_RX_PIN].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_INEN; // Enable port mux
 }
 
 void sb_uart_init(void)
@@ -58,7 +58,7 @@ void sb_uart_init(void)
 	sb_buff_count = 0;
 	line_count = 0;
 	
-	CONF_STDIO_USART_MODULE->USART.CTRLA.reg =
+	SB_UART_MODULE->USART.CTRLA.reg =
 	SERCOM_USART_CTRLA_DORD						|	// LSB_FIRST
 	SERCOM_USART_CTRLA_TXPO(0)					|	// TX on Pad2
 	SERCOM_USART_CTRLA_RXPO(2)					|	// RX on Pad0
@@ -70,41 +70,41 @@ void sb_uart_init(void)
 	// Asynchronous arithmetic mode
 	// 65535 * ( 1 - sampleRateValue * baudrate / SystemCoreClock);
 	// 65535 - 65535 * (sampleRateValue * baudrate / SystemCoreClock));
-	CONF_STDIO_USART_MODULE->USART.BAUD.reg = 65535.0f * ( 1.0f - (16.0 * (float)(9600)) / (float)(SYSTEM_CLK));
+	SB_UART_MODULE->USART.BAUD.reg = 65535.0f * ( 1.0f - (16.0 * (float)(SB_UART_BAUDRATE)) / (float)(SYSTEM_CLK));
 	//BLE_UART_SERCOM->USART.BAUD.bit.BAUD = 9600;
 	
-	CONF_STDIO_USART_MODULE->USART.CTRLB.reg =
+	SB_UART_MODULE->USART.CTRLB.reg =
 	SERCOM_USART_CTRLB_CHSIZE(0)	|	// 8 bit character size
 	SERCOM_USART_CTRLB_TXEN			|	// Enable Transmit
 	SERCOM_USART_CTRLB_RXEN;			// Enable Receive
 
 	// Get Synced
-	while (CONF_STDIO_USART_MODULE->USART.SYNCBUSY.bit.CTRLB);
+	while (SB_UART_MODULE->USART.SYNCBUSY.bit.CTRLB);
 
 	//Set the Interrupt to use
-	CONF_STDIO_USART_MODULE->USART.INTENSET.reg = SERCOM_USART_INTENSET_RXC;	// Interrupt on received complete
+	SB_UART_MODULE->USART.INTENSET.reg = SERCOM_USART_INTENSET_RXC;	// Interrupt on received complete
 	
 	// Enable interrupts
 	NVIC_EnableIRQ(SERCOM1_IRQn);
 	NVIC_SetPriority(SERCOM1_IRQn,1);
 	
 	// enable the peripheral block
-	CONF_STDIO_USART_MODULE->USART.CTRLA.bit.ENABLE = 0x1u;
+	SB_UART_MODULE->USART.CTRLA.bit.ENABLE = 0x1u;
 	
 	// Wait for sercom to enable
-	while(CONF_STDIO_USART_MODULE->USART.SYNCBUSY.bit.ENABLE);
+	while(SB_UART_MODULE->USART.SYNCBUSY.bit.ENABLE);
 }
 
 
 void SERCOM1_Handler()
 {
-	if (CONF_STDIO_USART_MODULE->USART.INTFLAG.bit.RXC)
+	if (SB_UART_MODULE->USART.INTFLAG.bit.RXC)
 	{
 		// Got a character
 		if (sb_buff_count > sizeof(sb_rx_buffer_array)-1)
 		{
 			sb_buff_count = 0;
-			sb_rx_buffer_array[sb_buff_count] = (uint8_t) CONF_STDIO_USART_MODULE->USART.DATA.reg;
+			sb_rx_buffer_array[sb_buff_count] = (uint8_t) SB_UART_MODULE->USART.DATA.reg;
 			if (sb_rx_buffer_array[sb_buff_count] == 13)
 			{
 				line_count++;
@@ -112,7 +112,7 @@ void SERCOM1_Handler()
 		}
 		else
 		{
-			sb_rx_buffer_array[sb_buff_count++] = (uint8_t)CONF_STDIO_USART_MODULE->USART.DATA.reg;
+			sb_rx_buffer_array[sb_buff_count++] = (uint8_t)SB_UART_MODULE->USART.DATA.reg;
 			if (sb_rx_buffer_array[sb_buff_count-1] == 13)
 			{
 				line_count++;
@@ -121,14 +121,14 @@ void SERCOM1_Handler()
 	}
 }
 
-void sb_uart_write(char buffer[])
+void sb_uart_write(uint8_t *data)
 {
 	uint32_t i = 0;
-	while(buffer[i] != '\0')
+	while(data[i] != '\0')
 	{
-		if(CONF_STDIO_USART_MODULE->USART.INTFLAG.bit.DRE == 1)
+		if(SB_UART_MODULE->USART.INTFLAG.bit.DRE == 1)
 		{
-			CONF_STDIO_USART_MODULE->USART.DATA.reg = (uint16_t)buffer[i++];
+			SB_UART_MODULE->USART.DATA.reg = (uint16_t)data[i++];
 		}
 	}
 }

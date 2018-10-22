@@ -117,6 +117,7 @@ uint8_t get_intake_manifold_pressure(void);
 int get_intake_air_temp(void);
 uint16_t get_engine_rpm(void);
 uint8_t get_vehicle_speed(void);
+uint8_t get_monitor_status(void);
 float get_battery_voltage(void);
 
 #endif /* OBD_H_ */

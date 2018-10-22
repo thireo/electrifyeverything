@@ -29,7 +29,7 @@
  */
 #include <asf.h>
 #include "main.h"
-#include "uart.h"
+#include "sb_uart.h"
 #include "ble_uart.h"
 //#include "ads1115.h"
 #include "mcp23017.h"
@@ -38,7 +38,6 @@
 #include "pwm.h"
 #include "sounds.h"
 #include "msgeq7.h"
-#include "uart.h"
 #include "string.h"
 #include "obd.h"
 
@@ -49,7 +48,6 @@
 
 
 
-char buffer[32];
 
 
 
@@ -135,9 +133,9 @@ int main (void)
 		{
 			char buffer[32];
 			sprintf(buffer,"Battery: %dV\r\n",(int)get_battery_voltage());
-			ble_uart_write(buffer);
+			ble_uart_write((uint8_t *)buffer);
 			sprintf(buffer,"RPM: %d\r\n",get_engine_rpm());
-			ble_uart_write(buffer);
+			ble_uart_write((uint8_t *)buffer);
 			obd_should_update = false;
 		}
 		
@@ -151,7 +149,7 @@ int main (void)
 		
 		for (uint32_t i=0;i<sizeof(rx_buffer_array)-1;i++)
 		{
-			if (rx_buffer_array[i] == '\n' & rx_buffer_array[i+1] == 0)//'\n')
+			if ((rx_buffer_array[i] == '\n') & (rx_buffer_array[i+1] == 0))//'\n')
 			{
 				data_handler(rx_buffer_array);
 				reset_buffers();

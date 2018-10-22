@@ -11,7 +11,7 @@
 #include "msgeq7.h"
 #include "ble_uart.h"
 #include "i2c.h"
-#include "uart.h"
+#include "sb_uart.h"
 
 void pwm_port(void)
 {

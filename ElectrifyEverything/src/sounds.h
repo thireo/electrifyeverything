@@ -43,11 +43,11 @@
 
 #define SAMPLE_RATE_x16 0
 
-#define SOUNDS_BAUDRATE 9600
+/*#define SOUNDS_BAUDRATE 9600
 #define SYSTEM_CLK 8000000
 #define SOUNDS_RX_PIN 3
 #define SOUNDS_TX_PIN 2
-#define SOUNDS_SERCOM SERCOM5
+#define SOUNDS_SERCOM SERCOM5*/
 
 volatile char sounds_rx_buffer_array[128];
 volatile static int sounds_buff_count;
@@ -77,7 +77,7 @@ void sounds_uart_init(void);
 void sounds_uart_write(char buffer[]);
 void sounds_reset_buffers(void);
 
-void sb_event_handler(char buffer[]);
+void sb_event_handler(char *buffer);
 void sb_play_track_by_number(int number);
 void sb_quit(void);
 bool is_started(void);

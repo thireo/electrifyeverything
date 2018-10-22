@@ -51,13 +51,13 @@ void ble_uart_pin_init(void)
 
 	// set port multiplexer for peripheral TX
 	// =======================================
-	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[TX_PIN>>1].reg) & PORT_PMUX_PMUXO( GPIO_SERCOM_ALT_D );
-	PORT->Group[PORTGROUP_A].PMUX[TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( GPIO_SERCOM_ALT_D );
+	uint32_t temp = (PORT->Group[PORTGROUP_A].PMUX[BLE_UART_TX_PIN>>1].reg) & PORT_PMUX_PMUXO( GPIO_SERCOM_ALT_D );
+	PORT->Group[PORTGROUP_A].PMUX[BLE_UART_TX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( GPIO_SERCOM_ALT_D );
 	
-	PORT->Group[PORTGROUP_A].PINCFG[TX_PIN].reg = PORT_PINCFG_PMUXEN ; // Enable port mux
-	temp = (PORT->Group[PORTGROUP_A].PMUX[RX_PIN>>1].reg) & PORT_PMUX_PMUXO( GPIO_SERCOM_ALT_D );
-	PORT->Group[PORTGROUP_A].PMUX[RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( GPIO_SERCOM_ALT_D );
-	PORT->Group[PORTGROUP_A].PINCFG[RX_PIN].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_INEN; // Enable port mux
+	PORT->Group[PORTGROUP_A].PINCFG[BLE_UART_TX_PIN].reg = PORT_PINCFG_PMUXEN ; // Enable port mux
+	temp = (PORT->Group[PORTGROUP_A].PMUX[BLE_UART_RX_PIN>>1].reg) & PORT_PMUX_PMUXO( GPIO_SERCOM_ALT_D );
+	PORT->Group[PORTGROUP_A].PMUX[BLE_UART_RX_PIN>>1].reg = temp | PORT_PMUX_PMUXE( GPIO_SERCOM_ALT_D );
+	PORT->Group[PORTGROUP_A].PINCFG[BLE_UART_RX_PIN].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_INEN; // Enable port mux
 }
 
 void ble_uart_init(void)
@@ -79,7 +79,7 @@ void ble_uart_init(void)
 	// Asynchronous arithmetic mode
 	// 65535 * ( 1 - sampleRateValue * baudrate / SystemCoreClock);
 	// 65535 - 65535 * (sampleRateValue * baudrate / SystemCoreClock));
-	BLE_UART_SERCOM->USART.BAUD.reg = 65535.0f * ( 1.0f - (16.0 * (float)(BAUDRATE)) / (float)(SYSTEM_CLK));
+	BLE_UART_SERCOM->USART.BAUD.reg = 65535.0f * ( 1.0f - (16.0 * (float)(BLE_UART_BAUDRATE)) / (float)(SYSTEM_CLK));
 	//BLE_UART_SERCOM->USART.BAUD.bit.BAUD = 9600;
 	
 	BLE_UART_SERCOM->USART.CTRLB.reg =
@@ -106,26 +106,19 @@ void ble_uart_init(void)
 	reset_buffers();
 }
 
-void ble_uart_write(char buffer[])
+void ble_uart_write(uint8_t *data)
 {
 	system_interrupt_disable_global();
 	uint32_t i = 0;
-	while(buffer[i] != '\0')
+	while(data[i] != '\0')
 	{
 		if(BLE_UART_SERCOM->USART.INTFLAG.bit.DRE == 1)
 		{
-			BLE_UART_SERCOM->USART.DATA.reg = (uint16_t)buffer[i++];
+			BLE_UART_SERCOM->USART.DATA.reg = (uint16_t)data[i++];
 		}
 	}
 	system_interrupt_enable_global();
 }
-
-void Uart_write(const uint16_t data)
-{
-	while(BLE_UART_SERCOM->USART.INTFLAG.bit.DRE == 0) ; // wait for TX data empty
-	BLE_UART_SERCOM->USART.DATA.reg = data;
-}
-
 
 void SERCOM2_Handler()
 {

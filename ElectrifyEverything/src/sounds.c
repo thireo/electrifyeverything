@@ -5,7 +5,7 @@
  *  Author: Andreas
  */ 
 #include "sounds.h"
-#include "uart.h"
+#include "sb_uart.h"
 #include "string.h"
 
 struct soundboard_tracks
@@ -30,128 +30,128 @@ struct adafruit_soundboards
 struct adafruit_soundboards soundboard_instance ={		\
 	.started = false,									\
 	.is_playing = false,								\
-	.tracks[0].filename = "UNDEFINED FILE",				\
-	.tracks[0].filetype = "N/A",						\
+	.tracks[0].filename = (char *)"UNDEFINED FILE",		\
+	.tracks[0].filetype = (char *)"N/A",						\
 	.tracks[0].is_playing = false,						\
 	.tracks[0].track_number = 0,						\
 	.tracks[0].filesize = 0,							\
-	.tracks[1].filename = "UNDEFINED FILE",				\
-	.tracks[1].filetype = "N/A",						\
+	.tracks[1].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[1].filetype = (char *)"N/A",						\
 	.tracks[1].is_playing = false,						\
 	.tracks[1].track_number = 1,						\
 	.tracks[1].filesize = 0,							\
-	.tracks[2].filename = "UNDEFINED FILE",				\
-	.tracks[2].filetype = "N/A",						\
+	.tracks[2].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[2].filetype = (char *)"N/A",						\
 	.tracks[2].is_playing = false,						\
 	.tracks[2].track_number = 2,						\
 	.tracks[2].filesize = 0,							\
-	.tracks[3].filename = "UNDEFINED FILE",				\
-	.tracks[3].filetype = "N/A",						\
+	.tracks[3].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[3].filetype = (char *)"N/A",						\
 	.tracks[3].is_playing = false,						\
 	.tracks[3].track_number = 3,						\
 	.tracks[3].filesize = 0,							\
-	.tracks[4].filename = "UNDEFINED FILE",				\
-	.tracks[4].filetype = "N/A",						\
+	.tracks[4].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[4].filetype = (char *)"N/A",						\
 	.tracks[4].is_playing = false,						\
 	.tracks[4].track_number = 4,						\
 	.tracks[4].filesize = 0,							\
-	.tracks[5].filename = "UNDEFINED FILE",				\
-	.tracks[5].filetype = "N/A",						\
+	.tracks[5].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[5].filetype = (char *)"N/A",						\
 	.tracks[5].is_playing = false,						\
 	.tracks[5].track_number = 5,						\
 	.tracks[5].filesize = 0,							\
-	.tracks[6].filename = "UNDEFINED FILE",				\
-	.tracks[6].filetype = "N/A",						\
+	.tracks[6].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[6].filetype = (char *)"N/A",						\
 	.tracks[6].is_playing = false,						\
 	.tracks[6].track_number = 6,						\
 	.tracks[6].filesize = 0,							\
-	.tracks[7].filename = "UNDEFINED FILE",				\
-	.tracks[7].filetype = "N/A",						\
+	.tracks[7].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[7].filetype = (char *)"N/A",						\
 	.tracks[7].is_playing = false,						\
 	.tracks[7].track_number = 7,						\
 	.tracks[7].filesize = 0,							\
-	.tracks[8].filename = "UNDEFINED FILE",				\
-	.tracks[8].filetype = "N/A",						\
+	.tracks[8].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[8].filetype = (char *)"N/A",						\
 	.tracks[8].is_playing = false,						\
 	.tracks[8].track_number = 8,						\
 	.tracks[8].filesize = 0,							\
-	.tracks[9].filename = "UNDEFINED FILE",				\
-	.tracks[9].filetype = "N/A",						\
+	.tracks[9].filename = (char *)"UNDEFINED FILE",				\
+	.tracks[9].filetype = (char *)"N/A",						\
 	.tracks[9].is_playing = false,						\
 	.tracks[9].track_number = 9,						\
 	.tracks[9].filesize = 0,							\
-	.tracks[10].filename = "UNDEFINED FILE",			\
-	.tracks[10].filetype = "N/A",						\
+	.tracks[10].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[10].filetype = (char *)"N/A",						\
 	.tracks[10].is_playing = false,						\
 	.tracks[10].track_number = 10,						\
 	.tracks[10].filesize = 0,							\
-	.tracks[11].filename = "UNDEFINED FILE",			\
-	.tracks[11].filetype = "N/A",						\
+	.tracks[11].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[11].filetype = (char *)"N/A",						\
 	.tracks[11].is_playing = false,						\
 	.tracks[11].track_number = 11,						\
 	.tracks[11].filesize = 0,							\
-	.tracks[12].filename = "UNDEFINED FILE",			\
-	.tracks[12].filetype = "N/A",						\
+	.tracks[12].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[12].filetype = (char *)"N/A",						\
 	.tracks[12].is_playing = false,						\
 	.tracks[12].track_number = 12,						\
 	.tracks[12].filesize = 0,							\
-	.tracks[13].filename = "UNDEFINED FILE",			\
-	.tracks[13].filetype = "N/A",						\
+	.tracks[13].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[13].filetype = (char *)"N/A",						\
 	.tracks[13].is_playing = false,						\
 	.tracks[13].track_number = 13,						\
 	.tracks[13].filesize = 0,							\
-	.tracks[14].filename = "UNDEFINED FILE",			\
-	.tracks[14].filetype = "N/A",						\
+	.tracks[14].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[14].filetype = (char *)"N/A",						\
 	.tracks[14].is_playing = false,						\
 	.tracks[14].track_number = 14,						\
 	.tracks[14].filesize = 0,							\
-	.tracks[15].filename = "UNDEFINED FILE",			\
-	.tracks[15].filetype = "N/A",						\
+	.tracks[15].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[15].filetype = (char *)"N/A",						\
 	.tracks[15].is_playing = false,						\
 	.tracks[15].track_number = 15,						\
 	.tracks[15].filesize = 0,							\
-	.tracks[16].filename = "UNDEFINED FILE",			\
-	.tracks[16].filetype = "N/A",						\
+	.tracks[16].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[16].filetype = (char *)"N/A",						\
 	.tracks[16].is_playing = false,						\
 	.tracks[16].track_number = 16,						\
 	.tracks[16].filesize = 0,							\
-	.tracks[17].filename = "UNDEFINED FILE",			\
-	.tracks[17].filetype = "N/A",						\
+	.tracks[17].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[17].filetype = (char *)"N/A",						\
 	.tracks[17].is_playing = false,						\
 	.tracks[17].track_number = 17,						\
 	.tracks[17].filesize = 0,							\
-	.tracks[18].filename = "UNDEFINED FILE",			\
-	.tracks[18].filetype = "N/A",						\
+	.tracks[18].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[18].filetype = (char *)"N/A",						\
 	.tracks[18].is_playing = false,						\
 	.tracks[18].track_number = 18,						\
 	.tracks[18].filesize = 0,							\
-	.tracks[19].filename = "UNDEFINED FILE",			\
-	.tracks[19].filetype = "N/A",						\
+	.tracks[19].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[19].filetype = (char *)"N/A",						\
 	.tracks[19].is_playing = false,						\
 	.tracks[19].track_number = 19,						\
 	.tracks[19].filesize = 0,							\
-	.tracks[20].filename = "UNDEFINED FILE",			\
-	.tracks[20].filetype = "N/A",						\
+	.tracks[20].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[20].filetype = (char *)"N/A",						\
 	.tracks[20].is_playing = false,						\
 	.tracks[20].track_number = 20,						\
 	.tracks[20].filesize = 0,							\
-	.tracks[21].filename = "UNDEFINED FILE",			\
-	.tracks[21].filetype = "N/A",						\
+	.tracks[21].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[21].filetype = (char *)"N/A",						\
 	.tracks[21].is_playing = false,						\
 	.tracks[21].track_number = 21,						\
 	.tracks[21].filesize = 0,							\
-	.tracks[22].filename = "UNDEFINED FILE",			\
-	.tracks[22].filetype = "N/A",						\
+	.tracks[22].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[22].filetype = (char *)"N/A",						\
 	.tracks[22].is_playing = false,						\
 	.tracks[22].track_number = 22,						\
 	.tracks[22].filesize = 0,							\
-	.tracks[23].filename = "UNDEFINED FILE",			\
-	.tracks[23].filetype = "N/A",						\
+	.tracks[23].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[23].filetype = (char *)"N/A",						\
 	.tracks[23].is_playing = false,						\
 	.tracks[23].track_number = 23,						\
 	.tracks[23].filesize = 0,							\
-	.tracks[24].filename = "UNDEFINED FILE",			\
-	.tracks[24].filetype = "N/A",						\
+	.tracks[24].filename = (char *)"UNDEFINED FILE",			\
+	.tracks[24].filetype = (char *)"N/A",						\
 	.tracks[24].is_playing = false,						\
 	.tracks[24].track_number = 24,						\
 	.tracks[24].filesize = 0,							\
@@ -298,7 +298,7 @@ void sounds_reset(void)
 }
 int temp_track = 0;
 char * stringy_pointy;
-void sb_event_handler(char buffer[])
+void sb_event_handler(char *buffer)
 {
 	if (strstr(buffer,"Adafruit FX Sound Board") != NULL && line_count > 3)
 	{
@@ -318,7 +318,7 @@ void sb_event_handler(char buffer[])
 		
 		sb_reset_buffers();
 		delay_ms(500);
-		sb_uart_write("L\n");
+		sb_uart_write((uint *)"L\n");
 		//Adafruit Soundboard started.
 	}
 	if (strstr(buffer,"NoFile") != NULL)

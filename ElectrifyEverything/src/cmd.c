@@ -12,7 +12,7 @@
 #include "mcp23017.h"
 char test_bob[] = "PWM";
 #include "sounds.h"
-#include "uart.h"
+#include "sb_uart.h"
 
 bool bool_map_1[26][8] = {
 	{false,false,false,false,false,false,false,false},
@@ -164,14 +164,14 @@ int buf_count = 0;
 
 void data_handler(char buffer[])
 {
-	int buf_s = strlen(buffer);
+	//int buf_s = strlen(buffer);
 	if (strncmp(buffer,"\r\n\rAdafruit",7) == 0)
 	{
-		ble_uart_write("#01\n");
+		ble_uart_write((uint8_t *)"#01\n");
 	}
 	if (strncmp(buffer,"T00",3) == 0)
 	{
-		ble_uart_write("L\n");
+		ble_uart_write((uint8_t *)"L\n");
 		int arg0;
 		//ble_uart_write("L\n");
 		sscanf(buffer,"T0%d",&arg0);
@@ -179,7 +179,7 @@ void data_handler(char buffer[])
 	
 	if (strncmp(buffer,test_bob,3) == 0)
 	{
-		ble_uart_write("bob was found");
+		ble_uart_write((uint8_t *)"bob was found");
 		
 		if (strlen(buffer) > strlen(test_bob))
 		{
@@ -193,7 +193,7 @@ void data_handler(char buffer[])
 			pwm_bob = arg1;
 			char string_buffer[32];
 			sprintf(string_buffer,": %d",arg1);
-			ble_uart_write(string_buffer);
+			ble_uart_write((uint8_t *)string_buffer);
 		}
 	}
 
@@ -230,9 +230,9 @@ void data_handler(char buffer[])
 		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,true);
 		
 		flash_all = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASH_ALL_OFF,4) == 0)
 	{
@@ -266,9 +266,9 @@ void data_handler(char buffer[])
 		configure_pin(CABIN_BACK_PORT,CABIN_BACK_ADR,CABIN_BACK_PIN,false);
 		
 		flash_all = false;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,BLINK_ALL_ON,5) == 0)
 	{
@@ -434,7 +434,7 @@ void data_handler(char buffer[])
 	}*/
 	else if (strncmp(buffer,SOUND_RESET,sizeof(SOUND_RESET)-1) == 0)
 	{
-		ble_uart_write("SB: RESETTING");
+		ble_uart_write((uint8_t *)"SB: RESETTING");
 		sounds_reset();
 	}
 	else if(strncmp(buffer,PARTY_ON,5) == 0)
@@ -468,9 +468,9 @@ void data_handler(char buffer[])
 		configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR, HIGH_BEAM_RIGHT_PIN,true);
 		configure_pin(LEDBAR_PORT,LEDBAR_ADR, LEDBAR_PIN,true);
 		led_bar = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,LED_BAR_OFF,5) == 0)
 	{
@@ -478,9 +478,9 @@ void data_handler(char buffer[])
 		configure_pin(HIGH_BEAM_RIGHT_PORT,HIGH_BEAM_RIGHT_ADR,HIGH_BEAM_RIGHT_PIN,false);
 		configure_pin(LEDBAR_PORT,LEDBAR_ADR,LEDBAR_PIN,false);
 		led_bar = false;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,HDL_ON,5) == 0)
 	{
@@ -493,9 +493,9 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,true);
 		mcp23017_reset();
 		system_interrupt_enable_global();
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,HDL_OFF,5) == 0)
 	{
@@ -508,9 +508,9 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,false);
 		mcp23017_reset();
 		system_interrupt_enable_global();
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,BRIAN_ON,7) == 0)
 	{
@@ -523,9 +523,9 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR, POSITION_REAR_RIGHT_PIN,true);
 		mcp23017_reset();
 		system_interrupt_enable_global();
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,BRIAN_OFF,7) == 0)
 	{
@@ -538,73 +538,73 @@ void data_handler(char buffer[])
 		configure_pin(POSITION_REAR_RIGHT_PORT,POSITION_REAR_RIGHT_ADR,POSITION_REAR_RIGHT_PIN,false);
 		mcp23017_reset();
 		system_interrupt_enable_global();
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHY1_ON,7) == 0)
 	{
 		flashy1 = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHY1_OFF,7) == 0)
 	{
 		flashy1 = false;
 		reset_all_lights();
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHY2_ON,7) == 0)
 	{
 		flashy2 = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHY2_OFF,7) == 0)
 	{
 		reset_all_lights();
 		flashy2 = false;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHY3_ON,7) == 0)
 	{
 		flashy3 = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHY3_OFF,7) == 0)
 	{
 		reset_all_lights();
 		flashy3 = false;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHYFADE_ON,8) == 0)
 	{
 		flashyfade = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,FLASHYFADE_OFF,8) == 0)
 	{
 		reset_all_lights();
 		flashyfade = false;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if (strncmp(buffer,MASTER_RESET,10) == 0)
 	{
-		ble_uart_write("RESET ACK\n");
+		ble_uart_write((uint8_t *)"RESET ACK\n");
 		delay_ms(250);
 		wdt_init();
 		while (1)
@@ -614,12 +614,12 @@ void data_handler(char buffer[])
 	}
 	else if (strncmp(buffer,MINOR_RESET,sizeof(MINOR_RESET)-1) == 0)
 	{
-		ble_uart_write("MINOR RESET ACK\n");
+		ble_uart_write((uint8_t *)"MINOR RESET ACK\n");
 		delay_ms(250);
 		sounds_reset();
 		init_all_ports();
 		party = false;
-		ble_uart_write("MINOR RESET DONE\n");
+		ble_uart_write((uint8_t *)"MINOR RESET DONE\n");
 	}
 	else if (strncmp(buffer,PARTY_TRESH_0,sizeof(PARTY_TRESH_0)-1)  == 0)
 	{
@@ -673,40 +673,40 @@ void data_handler(char buffer[])
 	{
 		valve_open = true;
 		valve_close = false;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if (strncmp(buffer,CUT_OUT_VALVE_OFF,sizeof(CUT_OUT_VALVE_OFF)-1) == 0)
 	{
 		valve_open = false;
 		valve_close = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
-	else if(strncmp(buffer,PARTY_REV2_ON,sizeof(PARTY_REV2_ON)-1) == 0)
+	/*else if(strncmp(buffer,PARTY_REV2_ON,sizeof(PARTY_REV2_ON)-1) == 0)
 	{
 		uint8_t temp;
-		sscanf(buffer,"PRTRV21 %d",&temp);
+		sscanf(buffer,"PRTRV21 %d",(int)&temp);
 		party_band_chosen = temp;
 		partyrev2 = true;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 	}
 	else if(strncmp(buffer,PARTY_REV2_OFF,sizeof(PARTY_REV2_OFF)-1) == 0)
 	{
 		partyrev2 = false;
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
-	}
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
+	}*/
 	else if(strncmp(buffer,MASTER_TEST,sizeof(MASTER_TEST)-1) == 0)
 	{
-		ble_uart_write(buffer);
-		ble_uart_write(" - ");
-		ble_uart_write("ACK");
+		ble_uart_write((uint8_t *)buffer);
+		ble_uart_write((uint8_t *)" - ");
+		ble_uart_write((uint8_t *)"ACK");
 		execute_order_66 = true;
 	}
 }
@@ -1120,12 +1120,12 @@ bool a_okay()
 		}
 		mcp23017_data.devices[i].status = states[i];
 		sprintf(buffer,"ADDR: %d -> %d\n",i,mcp23017_data.devices[i].status);
-		ble_uart_write(buffer);
-		sb_uart_write(buffer);
+		ble_uart_write((uint8_t *)buffer);
+		sb_uart_write((uint8_t *)buffer);
 	}
 	sprintf(buffer,"ERR: %d%d%d%d%d%d%d%d\r\n",mcp23017_data.devices[7].error_detected,mcp23017_data.devices[6].error_detected,mcp23017_data.devices[5].error_detected,mcp23017_data.devices[4].error_detected,mcp23017_data.devices[3].error_detected,mcp23017_data.devices[2].error_detected,mcp23017_data.devices[1].error_detected,mcp23017_data.devices[0].error_detected);
-	ble_uart_write(buffer);
-	sb_uart_write(buffer);
+	ble_uart_write((uint8_t *)buffer);
+	sb_uart_write((uint8_t *)buffer);
 	
 	return return_val;
 }
@@ -1156,18 +1156,18 @@ void mcp23017_reset_error_codes()
 void mcp23017_check_all()
 {
 	bool returnVal = false;
-	uint8_t buffer[32];
+	char buffer[32];
 	for (int i=0;i<8;i++)
 	{
-		if (mcp23017_data.devices[i].should_be_enabled & mcp23017_data.devices[i].status != STATUS_OK)
+		if ((mcp23017_data.devices[i].should_be_enabled) & (mcp23017_data.devices[i].status != STATUS_OK))
 		{
 			sprintf(buffer,"E: %d - %d\n",i,mcp23017_data.devices[i].status);
-			ble_uart_write(buffer);
+			ble_uart_write((uint8_t *)buffer);
 			returnVal = true;
 		}
 	}
 	if (!returnVal)
 	{
-		ble_uart_write("ALL OK");
+		ble_uart_write((uint8_t *)"ALL OK");
 	}
 }
